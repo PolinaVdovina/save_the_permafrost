@@ -1,13 +1,15 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import AuthWindow from "./components/AuthWindow"
+import { BrowserRouter, Route } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import {store} from './store'
+import {getAllRoutesFromPages} from './pages'
 
 function App() {
   return (
-    <div>
-      <AuthWindow></AuthWindow>
-    </div>
+    <Provider store={store}>
+      {getAllRoutesFromPages()}
+    </Provider>
   );
 }
 
