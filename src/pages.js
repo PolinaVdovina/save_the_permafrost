@@ -24,9 +24,15 @@ export const list = {
         path: '/register',
         component: RegWindow,
     },
+<<<<<<< HEAD
     houseCard: {
         title: 'Дом',
         path: '/card/:id',
+=======
+    houseCardNew: {
+        title: 'Новый дом',
+        path: '/card',
+>>>>>>> 576a3482cdaef3e84edb5934b5ff3bd14f4b7c04
         component: HouseCard,
     },
     registerLoginError: {
