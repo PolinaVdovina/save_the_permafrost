@@ -1,7 +1,7 @@
 import { Route, BrowserRouter } from 'react-router-dom'
 import React from 'react'
-import AuthWindow from "./components/AuthWindow"
-import RegWindow from "./components/RegWindow"
+import AuthWindow from "./pages/AuthWindow"
+import RegWindow from "./pages/RegWindow"
 import HouseCard from './components/HouseCard';
 import RegisterError from './components/RegisterError'
 import RegisterErrorRoles from './components/RegisterErrorRoles'
