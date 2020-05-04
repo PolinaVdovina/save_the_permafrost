@@ -11,10 +11,6 @@ export const list = {
         title: 'Регистрация',
         path: '/register',
         component: RegWindow,
-    },
-    registerError: {
-        title: 'Ошибка регистрации',
-        path: '/register/error',
-        component: RegisterError,
     }
 }
+

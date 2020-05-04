@@ -3,6 +3,9 @@ import React from 'react'
 import AuthWindow from "./components/AuthWindow"
 import RegWindow from "./components/RegWindow"
 import HouseCard from './components/HouseCard';
+import RegisterError from './components/RegisterError'
+import RegisterErrorRoles from './components/RegisterErrorRoles'
+import Home from './components/Home'
 
 export const list = {
     auth: {
@@ -16,10 +19,30 @@ export const list = {
         path: '/register',
         component: RegWindow,
     },
-    houseCard: {
-        title: 'В разработке...',
+    houseCardNew: {
+        title: 'Новый дом',
         path: '/card',
         component: HouseCard,
+    },
+    houseCard: {
+        title: 'Дом',
+        path: '/card/:id',
+        component: HouseCard,
+    },
+    registerLoginError: {
+        title: 'Ошибка регистрации',
+        path: '/errorlogin',
+        component: RegisterError,
+    },
+    registerRolesError: {
+        title: 'Ошибка регистрации',
+        path: '/errorroles',
+        component: RegisterErrorRoles,
+    },
+    homePage: {
+        title: 'Домашняя страница',
+        path: '/home',
+        component: Home,
     }
 };
 

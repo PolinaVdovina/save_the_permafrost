@@ -16,6 +16,7 @@ import { store } from '../store';
 import { login } from '../actions/AuthActions';
 import { connect } from 'react-redux';
 import {Link as RouteLink, Redirect, withRouter} from 'react-router-dom'
+import { list } from "../pages";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,7 +57,7 @@ const mapStateToProps = function(state) {
 
 
 
-function AuthWindow() {
+function AuthWindow(props) {
   const classes = useStyles();
   const [userLogin, setUserLogin] = useState('');
   const [password, setPassword] = useState('');
@@ -94,8 +95,9 @@ function AuthWindow() {
                 alert("ОК");
                 localStorage.setItem('access_token',response.access_token);
                 localStorage.setItem('user_login', userLogin);
-                localStorage.setItem('user_id',response.user_id);                        
-                store.dispatch(login(userLogin, response.access_token, response.user_id));
+                localStorage.setItem('user_id',response.user_id);     
+                localStorage.setItem('user_roles',response.roles);                     
+                store.dispatch(login(userLogin, response.access_token, response.user_id, response.roles));
                 break
         }
     });
@@ -103,6 +105,11 @@ function AuthWindow() {
     if (password === '') setErrorPassword('Заполните пароль');
     if (userLogin === '') setErrorLogin('Заполните логин');
   }
+
+  if (props.loggedIn) 
+    return (
+      <Redirect to={list.homePage.path} />
+    )
 
   return (
     <Grid container component="main" className={classes.root} justify='center' alignItems='center'>

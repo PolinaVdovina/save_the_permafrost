@@ -15,6 +15,7 @@ import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { connect } from "react-redux";
 import { list } from "../pages";
 import { Redirect } from "react-router";
+import { Backdrop, CircularProgress } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -62,11 +63,20 @@ function RegWindow(props) {
   const [errorLogin, setErrorLogin] = useState('');
   const [userRolesChangeUsers, setUserRolesChangeUsers] = useState(false);
   const [userRolesChangeRecords, setUserRolesChangeRecords] = useState(false);
+  const [donload, setDonload] = useState(true);
+  const [isAdmin, setAdmin] = useState(false);
+
+  React.useEffect(()=>{
+    let roles = localStorage.getItem('user_roles');
+    if (roles.includes('SuperUser') || roles.includes('ChangeUser')) setAdmin(true);
+    setDonload(false);
+  })
 
   function foo() {
     localStorage.removeItem('access_token');
     localStorage.removeItem('user_login');
     localStorage.removeItem('user_id');
+    localStorage.removeItem('user_roles');
   }
 
   function validate() {
@@ -110,90 +120,95 @@ function RegWindow(props) {
                         alert('Пользователь добавлен успешно!');
                         break
                 }
-            })//.catch(
-                //response=>{this.setState({loading:false})
-                //this.setState({connectionDialog: true})});   
+            })   
 
     if (password == '') setErrorPassword('Заполните пароль');
   }
 
-  
-        return(
-        <div>{
-        <Grid container component="main" className={classes.root} justify='center' alignItems='center'>
-        <CssBaseline />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-            <div className={classes.paper}>
-            <Avatar className={classes.avatar}>
-                <PermIdentity />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-                Регистрация
-            </Typography>
-            <form className={classes.form}>
-                <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                error={errorLogin!=''}
-                fullWidth
-                id="email"
-                helperText={errorLogin}
-                label="Логин"
-                name="email"
-                autoComplete="login"
-                autoFocus
-                onChange={(event) => {setLogin(event.target.value)}}
-                />
-                <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                error={errorPassword!=''}
-                name="password"
-                helperText={errorPassword}
-                label="Пароль" 
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                onChange={(event) => {setPassword(event.target.value)}}
-                />
-                <Typography variant="h6">Права пользователя:</Typography>
+      if(donload) return (
+        <Backdrop open={true} style={{zIndex: 1}}>
+          <CircularProgress/>
+        </Backdrop>) 
 
-                <Grid container>
-                    <Grid item md={12}>
-                        <FormControlLabel
-                            control={<Checkbox checked={userRolesChangeUsers} onChange={() => setUserRolesChangeUsers(!userRolesChangeUsers)}/>}
-                            label="Работа с данными пользователей"
-                        />
-                    </Grid>
-                    <Grid item md={12}>
-                        <FormControlLabel
-                            control={<Checkbox checked={userRolesChangeRecords} onChange={() => setUserRolesChangeRecords(!userRolesChangeRecords)}/>}
-                            label="Работа с сохраненными записями"
-                        />
-                    </Grid>
-                </Grid>
-                <Button
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                onClick={validate}
-                >
-                Сохранить
-                </Button>
-                <Button
-                  onClick={foo}>
-                  ТКНИ СЮДА
-                </Button>
-                
-            </form>
-            </div>
-        </Grid>
-        </Grid>}
-        {!props.loggedIn && <Redirect to={list.registerError.path}/>}
+      return(
+        <div>
+          { (props.loggedIn && isAdmin) &&
+          <Grid container component="main" className={classes.root} justify='center' alignItems='center'>
+          <CssBaseline />
+          <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+              <div className={classes.paper}>
+              <Avatar className={classes.avatar}>
+                  <PermIdentity />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                  Регистрация
+              </Typography>
+              <form className={classes.form}>
+                  <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  error={errorLogin!=''}
+                  fullWidth
+                  id="email"
+                  helperText={errorLogin}
+                  label="Логин"
+                  name="email"
+                  autoComplete="login"
+                  autoFocus
+                  onChange={(event) => {setLogin(event.target.value)}}
+                  />
+                  <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  error={errorPassword!=''}
+                  name="password"
+                  helperText={errorPassword}
+                  label="Пароль" 
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  onChange={(event) => {setPassword(event.target.value)}}
+                  />
+                  <Typography variant="h6">Права пользователя:</Typography>
+
+                  <Grid container>
+                      <Grid item md={12}>
+                          <FormControlLabel
+                              control={<Checkbox checked={userRolesChangeUsers} onChange={() => setUserRolesChangeUsers(!userRolesChangeUsers)}/>}
+                              label="Работа с данными пользователей"
+                          />
+                      </Grid>
+                      <Grid item md={12}>
+                          <FormControlLabel
+                              control={<Checkbox checked={userRolesChangeRecords} onChange={() => setUserRolesChangeRecords(!userRolesChangeRecords)}/>}
+                              label="Работа с сохраненными записями"
+                          />
+                      </Grid>
+                  </Grid>
+                  <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                  onClick={validate}
+                  >
+                  Сохранить
+                  </Button>
+                  <Button
+                    onClick={foo}>
+                    ТКНИ СЮДА
+                  </Button>
+                  
+              </form>
+              </div>
+          </Grid>
+          </Grid>
+        }
+        {!props.loggedIn && <Redirect to={list.registerLoginError.path}/>}
+        {!isAdmin && <Redirect to={list.registerRolesError.path}/>}
         </div>
         )
     }
