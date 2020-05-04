@@ -1,8 +1,8 @@
 import React from 'react';
 import { Kompot } from '../../components/ViewTable/Kompot';
-import { houseSettings } from '../../components/ViewTable/tableSettings'
+import { tubeSettings } from '../../components/ViewTable/tableSettings'
 import HouseCard from '../../components/HouseCard';
-export default class House extends React.Component {
+export default class Tube extends React.Component {
     constructor(props) {
         super(props)
     }
@@ -14,8 +14,8 @@ export default class House extends React.Component {
     render() {
         return(
             <>
-                <HouseCard id={13}  />
-                <Kompot settings={houseSettings}/>
+                <HouseCard id={175}/>
+                <Kompot settings={tubeSettings}/>
             </>
         )
     }

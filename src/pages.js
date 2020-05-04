@@ -7,11 +7,21 @@ import RegisterError from './components/RegisterError'
 import RegisterErrorRoles from './components/RegisterErrorRoles'
 import Home from './components/Home'
 import House from './pages/TableCards/House';
+import Tube from './pages/TableCards/Tube';
+import Sample from './pages/TableCards/Sample';
 
 export const list = {
     houses: {
         path: '/houses',
         component: House
+    },
+    house: {
+        path: '/house',
+        component: Tube
+    },
+    house: {
+        path: '/tube',
+        component: Sample
     },
     auth: {
         title: 'Авторизация',
@@ -23,17 +33,6 @@ export const list = {
         title: 'Регистрация',
         path: '/register',
         component: RegWindow,
-    },
-<<<<<<< HEAD
-    houseCard: {
-        title: 'Дом',
-        path: '/card/:id',
-=======
-    houseCardNew: {
-        title: 'Новый дом',
-        path: '/card',
->>>>>>> 576a3482cdaef3e84edb5934b5ff3bd14f4b7c04
-        component: HouseCard,
     },
     registerLoginError: {
         title: 'Ошибка регистрации',

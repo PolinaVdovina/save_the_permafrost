@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Grid, TextField, Paper } from '@material-ui/core';
+import { Typography, Grid, TextField, Paper, IconButton } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import SaveIcon from '@material-ui/icons/Save';
 import {change, add} from '../functions/fetchFunctions'
@@ -95,8 +95,8 @@ export default class HouseCard extends React.Component {
             <Grid container xs={12} sm={7} md={5} spacing={8} justify="center" alignItems="center">
                 <Grid item component={Paper} elevation={6} square>
                     <Typography variant="h3">
-                        {this.props.object.title}   {!this.state.isChangesActive && <CreateIcon onClick={()=> this.setState({isChangesActive: true})}></CreateIcon>}
-                        {this.state.isChangesActive && <SaveIcon onClick={()=> this.saveHandler()}></SaveIcon>}
+                        {this.props.object.title}   {!this.state.isChangesActive && <IconButton onClick={()=> this.setState({isChangesActive: true})}><CreateIcon/></IconButton>}
+                        {this.state.isChangesActive && <IconButton onClick={()=> this.saveHandler()}><SaveIcon/></IconButton>}
                     </Typography>                   
                     <hr></hr>
                     {list}                   
