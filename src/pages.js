@@ -24,11 +24,6 @@ export const list = {
         path: '/card',
         component: HouseCard,
     },
-    houseCard: {
-        title: 'Дом',
-        path: '/card/:id',
-        component: HouseCard,
-    },
     registerLoginError: {
         title: 'Ошибка регистрации',
         path: '/errorlogin',

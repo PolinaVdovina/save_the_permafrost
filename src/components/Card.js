@@ -39,9 +39,14 @@ export default class HouseCard extends React.Component {
         super(props);
         this.state = {
             isChangesActive: false,
-            ...props,
+            object: this.props.object,
+  
         };
-      }
+    }
+
+    componentDidMount() {
+       // this.setState({object: this.props.object});
+    }
 
     saveHandler() {
         this.setState({isChangesActive: false})
@@ -72,8 +77,10 @@ export default class HouseCard extends React.Component {
     }
 
     render() {
+        //alert("child state" + JSON.stringify(this.state.object));
+        //alert("child props" + JSON.stringify(this.props.object));
         const list = 
-            this.state.object.rows.map(row => 
+            this.props.object.rows.map(row => 
                 <TextFieldInfo 
                     header={row.header}
                     value={row.value} 
@@ -88,7 +95,7 @@ export default class HouseCard extends React.Component {
             <Grid container xs={12} sm={7} md={5} spacing={8} justify="center" alignItems="center">
                 <Grid item component={Paper} elevation={6} square>
                     <Typography variant="h3">
-                        {this.state.object.title}   {!this.state.isChangesActive && <CreateIcon onClick={()=> this.setState({isChangesActive: true})}></CreateIcon>}
+                        {this.props.object.title}   {!this.state.isChangesActive && <CreateIcon onClick={()=> this.setState({isChangesActive: true})}></CreateIcon>}
                         {this.state.isChangesActive && <SaveIcon onClick={()=> this.saveHandler()}></SaveIcon>}
                     </Typography>                   
                     <hr></hr>
