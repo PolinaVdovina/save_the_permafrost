@@ -6,8 +6,13 @@ import HouseCard from './components/HouseCard';
 import RegisterError from './components/RegisterError'
 import RegisterErrorRoles from './components/RegisterErrorRoles'
 import Home from './components/Home'
+import House from './pages/TableCards/House';
 
 export const list = {
+    houses: {
+        path: '/houses',
+        component: House
+    },
     auth: {
         title: 'Авторизация',
         path: '/auth',
@@ -18,11 +23,6 @@ export const list = {
         title: 'Регистрация',
         path: '/register',
         component: RegWindow,
-    },
-    houseCardNew: {
-        title: 'Новый дом',
-        path: '/card',
-        component: HouseCard,
     },
     houseCard: {
         title: 'Дом',

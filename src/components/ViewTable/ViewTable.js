@@ -64,7 +64,7 @@ class ViewTable extends React.Component {
                 rowsPerPage:10,
             },
         } = props;
-
+        
         this.state = {
             //Открыто ли окошко с фильтром?
             isFilterDrawerOpen: false,    
