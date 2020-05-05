@@ -16,7 +16,7 @@ import { store } from '../store';
 import { login } from '../actions/AuthActions';
 import { connect } from 'react-redux';
 import {Link as RouteLink, Redirect, withRouter} from 'react-router-dom'
-import { list } from "../pages";
+import { list } from "./pages";
 
 const useStyles = makeStyles((theme) => ({
   root: {

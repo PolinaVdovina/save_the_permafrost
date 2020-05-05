@@ -5,6 +5,7 @@ import { getTubeList, deleteTube, changeTube } from "../../https/tubes";
 import { getSampleList, changeSample, deleteSample } from "../../https/tubeSamples";
 import { Backdrop, CircularProgress, DialogTitle, DialogActions, Dialog, Button, DialogContent } from "@material-ui/core";
 import zIndex from "@material-ui/core/styles/zIndex";
+import { Redirect } from "react-router";
 
 const defaultSettings = {
     title: 'Дома',
@@ -37,6 +38,7 @@ export class Kompot extends React.Component {
             fetchErrorDialog: false,
             tableData: [],
             rowCount: 0,
+            redirectTo: null,
         };
     }
     
@@ -94,6 +96,12 @@ export class Kompot extends React.Component {
         });
     }
 
+    enterRowHandler = (id) => {
+        const {
+            enterPage
+        } = this.props; 
+    }
+
     changeRowAcceptHandler = (id, value, next) => {
         const {
             settings = defaultSettings,
@@ -106,6 +114,7 @@ export class Kompot extends React.Component {
     
     render() {
         const {
+            enterPage,
             settings = defaultSettings,                      //Адрес функции для получения списка сущностей в бакенде
             defaultPagination = {
                 currentPage: 0, 
@@ -117,13 +126,13 @@ export class Kompot extends React.Component {
             tableData = [],
             rowCount = 0,
             isFetching,
-            fetchErrorDialog
+            fetchErrorDialog,
+            
         } = this.state;
 
 
         return (
             <React.Fragment>
-                
                 <Dialog open={fetchErrorDialog==true}>
                     <DialogTitle>Ошибка</DialogTitle>
                     <DialogContent>
@@ -148,6 +157,9 @@ export class Kompot extends React.Component {
                 rowCount={rowCount}
                 onDeleteRow = {this.deleteRowHandler}
                 onChangeRowAccept = {this.changeRowAcceptHandler}
+                enterButtonHandler={this.enterRowHandler}
+                enterPage={enterPage}
+                enterPage={enterPage}
                 />
             </React.Fragment>
         )
