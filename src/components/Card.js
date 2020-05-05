@@ -37,15 +37,11 @@ export default class HouseCard extends React.Component {
 
     constructor(props) {
         super(props);
+        
         this.state = {
             isChangesActive: false,
-            object: this.props.object,
-  
+            ...props 
         };
-    }
-
-    componentDidMount() {
-       // this.setState({object: this.props.object});
     }
 
     saveHandler() {
@@ -55,7 +51,7 @@ export default class HouseCard extends React.Component {
             json[this.state.object.rows[i].name] = this.state.object.rows[i].value;
         
         if (this.state.object.id.value !== '') {
-           json[this.state.object.id.name] = this.state.object.id.value;
+            json[this.state.object.id.name] = this.state.object.id.value;
             change(this.props.object.type, json);  
         }
         else {
@@ -67,7 +63,9 @@ export default class HouseCard extends React.Component {
     changeHandler(event, row) {
         let i = this.state.object.rows.indexOf(row);
         let mass = this.state.object.rows;
+        
         mass[i].value = event.target.value;
+        
         this.setState({
             object: {
                 ...this.state.object, 
@@ -76,9 +74,7 @@ export default class HouseCard extends React.Component {
         })
     }
 
-    render() {
-        //alert("child state" + JSON.stringify(this.state.object));
-        //alert("child props" + JSON.stringify(this.props.object));
+    render() {       
         const list = 
             this.props.object.rows.map(row => 
                 <TextFieldInfo 

@@ -48,19 +48,20 @@ export function add(type, json) {
     fetch(url, (postGet)).then(response=>response.json())
 }
 
-export async function load(type, id) {
+export function load(type, id, func) {
     let url = getUrl(type);
     url += '/' + id;
 
     const postGet = {
         method: 'POST',
         headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('access_token'),
-          'Accept': 'application/json'
+        'Authorization': 'Bearer ' + localStorage.getItem('access_token'),
+        'Accept': 'application/json'
         },
     };
-    let response = await fetch(url, (postGet));
-    response = await response.json();
-    return response;
-
+    fetch(url, (postGet)).then(resolve => resolve.json()).then(resolve => func(resolve));
 }
+
+
+    
+    

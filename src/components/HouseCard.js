@@ -22,7 +22,7 @@ const objectDefault = {
         },               
         {
             "header": "Номер дома",
-            "name": "houseId",
+            "name": "number",
             "value": ""
         },
         {
@@ -43,60 +43,64 @@ export default class HouseCard extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            object: objectDefault,
-            id: props.id //13
+            id: props.id,
+            flag: false
         }
     }
 
-    async componentDidMount() {
-        if (this.state.id != undefined || this.state.id != '') {
-            let temp = await load('house', this.state.id); 
-            let object = {
-                "type": "house",
-                "id": {
-                    "name": "id",
-                    "value": this.state.id
-                },
-                "title": "Дом",
-                "rows": [
-                    {
-                        "header": "Район",
-                        "name": "district",
-                        "value": temp.district
-                    },
-                    {
-                        "header": "Улица",
-                        "name": "street",
-                        "value": temp.street
-                    },               
-                    {
-                        "header": "Номер дома",
-                        "name": "number",
-                        "value": temp.number
-                    },
-                    {
-                        "header": "Минимальная глубина фундамента",
-                        "name": "minLayingDepth",
-                        "value": temp.minLayingDepth
-                    },
-                    {
-                        "header": "Максимальная глубина фундамента",
-                        "name": "maxLayingDepth",
-                        "value": temp.maxLayingDepth
-                    },
-                ]
-            } 
-            this.setState({object: object});
-            alert(JSON.stringify(this.state.object));
+    componentWillMount() {
+        if (this.state.id == undefined && this.state.id == '') {
+            load('house', this.state.id, (temp) => 
+                {
+                    let object  = {
+                        "type": "house",
+                        "id": {
+                            "name": "id",
+                            "value": this.state.id
+                        },
+                        "title": "Дом",
+                        "rows": [
+                            {
+                                "header": "Район",
+                                "name": "district",
+                                "value": temp.district
+                            },
+                            {
+                                "header": "Улица",
+                                "name": "street",
+                                "value": temp.street
+                            },               
+                            {
+                                "header": "Номер дома",
+                                "name": "number",
+                                "value": temp.number
+                            },
+                            {
+                                "header": "Минимальная глубина фундамента",
+                                "name": "minLayingDepth",
+                                "value": temp.minLayingDepth
+                            },
+                            {
+                                "header": "Максимальная глубина фундамента",
+                                "name": "maxLayingDepth",
+                                "value": temp.maxLayingDepth
+                            },
+                        ]
+                    } 
+                    this.setState({object: object, flag: true});
+                }
+            );
         }
-        
+        else {
+            this.setState({object: objectDefault, flag: true});
+        }
     }
 
     render() {
-        
-        
         return(
-            <Card object={this.state.object}></Card>
+            <div>
+                {this.state.flag && <Card object={this.state.object}></Card>}
+            </div>
         )
     }
 } 
