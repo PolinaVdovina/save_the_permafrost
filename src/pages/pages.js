@@ -1,27 +1,29 @@
-import { Route, BrowserRouter } from 'react-router-dom'
-import React from 'react'
-import AuthWindow from "./pages/AuthWindow"
-import RegWindow from "./pages/RegWindow"
-import HouseCard from './components/HouseCard';
-import RegisterError from './components/RegisterError'
-import RegisterErrorRoles from './components/RegisterErrorRoles'
-import Home from './components/Home'
-import House from './pages/TableCards/House';
-import Tube from './pages/TableCards/Tube';
-import Sample from './pages/TableCards/Sample';
+import React from 'react';
+import Houses from "./TableCards/Houses";
+import House from "./TableCards/House";
+import Tube from "./TableCards/Tube";
+import AuthWindow from "./AuthWindow";
+import RegWindow from "./RegWindow";
+import RegisterError from "./Home";
+import RegisterErrorRoles from "../components/RegisterErrorRoles";
+import { Route } from "react-router";
+import Home from "./Home"
 
 export const list = {
     houses: {
         path: '/houses',
+        shortPath: '/houses/',
+        component: Houses
+    },
+    house: {
+        path: '/house/:id',
+        shortPath: '/house/',
         component: House
     },
-    house: {
-        path: '/house',
+    tube: {
+        path: '/tube/:id',
+        shortPath: '/tube/',
         component: Tube
-    },
-    house: {
-        path: '/tube',
-        component: Sample
     },
     auth: {
         title: 'Авторизация',

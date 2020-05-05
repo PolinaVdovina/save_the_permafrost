@@ -3,9 +3,10 @@ import './App.css';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import {store} from './store'
-import {getAllRoutesFromPages} from './pages'
+import {Pages} from './pages/'
 import { login } from './actions/AuthActions';
 import { Kompot } from './components/ViewTable/Kompot';
+import MainMenu from './components/MainMenu/MainMenu';
 
 function App() {
   React.useEffect(() => {
@@ -16,8 +17,8 @@ function App() {
 
   return (
     <Provider store={store}>
-
-      {getAllRoutesFromPages()}
+      <MainMenu></MainMenu>
+      {Pages.getAllRoutesFromPages()}
     </Provider>
   );
 }

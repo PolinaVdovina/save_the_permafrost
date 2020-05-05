@@ -41,7 +41,27 @@ export const SelectMouth = SelectByList(mouths);
 
 
 export const SelectDate = (props) => {
-    return <TextField></TextField>
+    const onChanged = (event) => {
+        let value = event.target.value;
+        let split = value.split('-');
+        let sendEvent = {
+            target:{value:''}
+        };
+        sendEvent.target.value = split[2] + '-' + split[1] + '-' + split[0];
+        props.onChange && props.onChange(sendEvent)
+    }
+    
+    const value = () => {
+        let value = props.value;
+        let split = value.split('-');
+        return split[2] + '-' + split[1] + '-' + split[0];
+    }
+
+    return <TextField
+    type='date' 
+    {...props}
+    onChange={onChanged}
+    value={value()}></TextField>
 }
 
 

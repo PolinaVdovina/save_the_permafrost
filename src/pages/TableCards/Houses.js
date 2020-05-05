@@ -1,11 +1,11 @@
 import React from 'react';
 import { Kompot } from '../../components/ViewTable/Kompot';
-import { samplesSettings } from '../../components/ViewTable/tableSettings'
+import { houseSettings } from '../../components/ViewTable/tableSettings'
 import HouseCard from '../../components/HouseCard';
-import { withRouter } from 'react-router';
 import { list } from '../pages';
+import { withRouter } from 'react-router';
 
-class Tube extends React.Component {
+class Houses extends React.Component {
     constructor(props) {
         super(props)
     }
@@ -18,14 +18,12 @@ class Tube extends React.Component {
         const id = this.props.match.params.id;
         return(
             <>
-                <HouseCard id={id} />
-                <Kompot
-
-                staticFilters={{ tubeId:[{type:'equal',value:id}] }}
-                settings={samplesSettings}/>
+                <Kompot 
+                enterPage={list.house.shortPath}
+                settings={houseSettings}/>
             </>
         )
     }
 } 
 
-export default withRouter(Tube)
+export default withRouter(Houses)

@@ -32,7 +32,8 @@ import FilterDrawer from './FilterDrawer';
 import {typeSelectors, changeTextFields, selectors} from './filterSelectors';
 import {getHouseList} from '../../https/houses'
 import ConfirmDialog from './ConfirmDialog';
-
+import BackIcon from '@material-ui/icons/ArrowBackIos';
+import { Link } from 'react-router-dom';
 //Для примера (это полученные с сервера данные о домах в Postman)
 const defaultTableData = [
     {
@@ -243,6 +244,9 @@ class ViewTable extends React.Component {
             onReloadData,
             rowCount,
             classes,
+            enterButtonHandler,
+            enterPage,
+
         } = this.props;
 
         const {
@@ -342,11 +346,13 @@ class ViewTable extends React.Component {
                             </React.Fragment>
                             }
                             {
-                                (settings.enterButtonHandler &&
+                                (enterPage &&
                                 changeRecord.id==null) && 
                                 <Tooltip title='Подробнее'>                        
                                     <IconButton
-                                    onClick = { () => settings.enterButtonHandler(tableData[id].id) }>
+                                    component={Link}
+                                    to={enterPage+tableData[id].id}
+                                    >
                                         <EnterIcon/>
                                     </IconButton>
                                 </Tooltip>
@@ -426,7 +432,8 @@ class ViewTable extends React.Component {
             settings,
             classes,
             rowCount,
-            onReloadData
+            onReloadData,
+            onBack
         } = this.props;
 
         const {
@@ -454,6 +461,17 @@ class ViewTable extends React.Component {
                     open={true}/>}
                 <Paper className = {classes.paper}>
                     <Toolbar>
+                        {
+                        onBack && 
+                        <Tooltip title='Назад'>
+                            <IconButton
+                            onClick = {() => onReloadData(filter, pagination) }
+                            className={classes.filterButton}>
+                                <BackIcon 
+                                className={classes.filterButtonIcon}/>
+                            </IconButton>
+                        </Tooltip>
+                        }
                         <Typography 
                         variant='h6'
                         className={classes.title}>

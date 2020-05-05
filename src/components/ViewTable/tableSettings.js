@@ -2,9 +2,10 @@ import { getHouseList, deleteHouse, changeHouse } from "../../https/houses";
 import { getTubeList, deleteTube, changeTube } from "../../https/tubes";
 import { getSampleList, changeSample, deleteSample } from "../../https/tubeSamples";
 
+
 export const houseSettings = {
     title: 'Дома',
-    enterButtonHandler: (id) => alert('Ты вошёл в дом ' + id + ', долбаёб'),
+    //enterButtonHandler: (id) => alert('Ты вошёл в дом ' + id + ', долбаёб'),
     headers: {
         street:               {value: 'Улица',    type: 'text' },         
         district:             {value: 'Район',    type: 'district' },         

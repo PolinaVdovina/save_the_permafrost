@@ -87,7 +87,7 @@ export default class HouseCard extends React.Component {
                 ]
             } 
             this.setState({object: object});
-            alert(JSON.stringify(this.state.object));
+
         }
         
     }
