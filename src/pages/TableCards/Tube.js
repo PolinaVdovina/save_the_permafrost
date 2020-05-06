@@ -1,9 +1,10 @@
 import React from 'react';
 import { Kompot } from '../../components/ViewTable/Kompot';
 import { samplesSettings } from '../../components/ViewTable/tableSettings'
-import HouseCard from '../../components/HouseCard';
+import TubeCard from '../../components/TubeCard';
 import { withRouter } from 'react-router';
 import { list } from '../pages';
+import SampleCard from '../../components/SampleCard';
 
 class Tube extends React.Component {
     constructor(props) {
@@ -18,7 +19,7 @@ class Tube extends React.Component {
         const id = this.props.match.params.id;
         return(
             <>
-                <HouseCard id={id} />
+                <TubeCard id={id} />
                 <Kompot
 
                 staticFilters={{ tubeId:[{type:'equal',value:id}] }}
