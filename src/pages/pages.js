@@ -5,7 +5,8 @@ import Tube from "./TableCards/Tube";
 import AuthWindow from "./AuthWindow";
 import RegWindow from "./RegWindow";
 import RegisterError from "./Home";
-import RegisterErrorRoles from "../components/RegisterErrorRoles";
+import RolesError from "../components/RolesError";
+import AuthError from "../components/AuthError";
 import { Route } from "react-router";
 import Home from "./Home"
 
@@ -36,15 +37,15 @@ export const list = {
         path: '/register',
         component: RegWindow,
     },
-    registerLoginError: {
+    authError: {
         title: 'Ошибка регистрации',
         path: '/errorlogin',
-        component: RegisterError,
+        component: AuthError,
     },
-    registerRolesError: {
+    rolesError: {
         title: 'Ошибка регистрации',
         path: '/errorroles',
-        component: RegisterErrorRoles,
+        component: RolesError,
     },
     homePage: {
         title: 'Домашняя страница',

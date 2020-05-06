@@ -13,7 +13,7 @@ import PermIdentity from '@material-ui/icons/PermIdentity';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { connect } from "react-redux";
-import { list } from "../pages";
+import { list } from "./pages";
 import { Redirect } from "react-router";
 import { Backdrop, CircularProgress } from '@material-ui/core';
 
@@ -67,17 +67,13 @@ function RegWindow(props) {
   const [isAdmin, setAdmin] = useState(false);
 
   React.useEffect(()=>{
-    let roles = localStorage.getItem('user_roles');
-    if (roles.includes('SuperUser') || roles.includes('ChangeUser')) setAdmin(true);
+    try{
+      let roles = localStorage.getItem('user_roles');
+      if (roles.includes('SuperUser') || roles.includes('ChangeUser')) setAdmin(true);
+    }
+    catch{}
     setDonload(false);
   })
-
-  function foo() {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('user_login');
-    localStorage.removeItem('user_id');
-    localStorage.removeItem('user_roles');
-  }
 
   function validate() {
 
@@ -197,18 +193,14 @@ function RegWindow(props) {
                   >
                   Сохранить
                   </Button>
-                  <Button
-                    onClick={foo}>
-                    ТКНИ СЮДА
-                  </Button>
                   
               </form>
               </div>
           </Grid>
           </Grid>
         }
-        {!props.loggedIn && <Redirect to={list.registerLoginError.path}/>}
-        {!isAdmin && <Redirect to={list.registerRolesError.path}/>}
+        {!props.loggedIn && <Redirect to={list.authError.path}/>}
+        {(props.loggedIn && !isAdmin) && <Redirect to={list.rolesError.path}/>}
         </div>
         )
     }
