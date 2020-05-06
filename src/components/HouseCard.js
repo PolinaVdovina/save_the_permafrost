@@ -49,7 +49,7 @@ export default class HouseCard extends React.Component {
     }
 
     componentWillMount() {
-        if (this.state.id == undefined && this.state.id == '') {
+        if (this.state.id != undefined && this.state.id != '') {
             load('house', this.state.id, (temp) => 
                 {
                     let object  = {
