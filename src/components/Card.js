@@ -88,8 +88,8 @@ export default class HouseCard extends React.Component {
             )
 
         return(
-            <Grid container xs={12} sm={7} md={5} spacing={8} justify="center" alignItems="center">
-                <Grid item component={Paper} elevation={6} square>
+            <Grid container  justify="left" alignItems="center">
+                <Grid item component={Paper} elevation={3} square style={{padding:'32px'}}>
                     <Typography variant="h3">
                         {this.props.object.title}   {!this.state.isChangesActive && <IconButton onClick={()=> this.setState({isChangesActive: true})}><CreateIcon/></IconButton>}
                         {this.state.isChangesActive && <IconButton onClick={()=> this.saveHandler()}><SaveIcon/></IconButton>}

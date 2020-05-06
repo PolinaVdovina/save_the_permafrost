@@ -54,7 +54,7 @@ class MainMenu extends React.Component {
                 component={ NavLink }
                 to={list.houses.shortPath} 
                 color="inherit">
-                    Сводная таблица
+                    Ведомость и графики
                 </Button>}
 
 
@@ -63,7 +63,7 @@ class MainMenu extends React.Component {
                 component={ NavLink }
                 to={list.houses.shortPath} 
                 color="inherit">
-                    Список домов
+                    Редактировать данные
                 </Button>}
 
 
