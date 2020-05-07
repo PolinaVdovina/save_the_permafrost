@@ -34,7 +34,6 @@ function TextFieldInfo(props) {
 
 
 export default class HouseCard extends React.Component {
-
     constructor(props) {
         super(props);
         

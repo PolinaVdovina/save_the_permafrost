@@ -43,11 +43,13 @@ export class Kompot extends React.Component {
     }
     
     getData = (filter, pagination, next) => {
+        
         this.setState({isFetching: true});
         const {
             root = 'entities',
             settings = defaultSettings,      
             staticFilters,   
+            advancedTableData='depths'
         } = this.props
 
         return settings.fetchFunctions.getList({
@@ -57,7 +59,9 @@ export class Kompot extends React.Component {
                     filter: filter, 
                     rowCount: data.count,
                     isFetching: false,
+                    advancedTableData: data[advancedTableData]
                 });
+               
             },
             onFailed: () => {
                 this.setState({isFetching: false, fetchErrorDialog: true});
@@ -120,6 +124,9 @@ export class Kompot extends React.Component {
                 currentPage: 0, 
                 rowsPerPage:10,
             },
+            drawHeader,
+            drawBody,
+            
         } = this.props;
         
         const {
@@ -127,7 +134,7 @@ export class Kompot extends React.Component {
             rowCount = 0,
             isFetching,
             fetchErrorDialog,
-            
+            advancedTableData
         } = this.state;
 
 
@@ -149,17 +156,19 @@ export class Kompot extends React.Component {
                     <CircularProgress/>
                 </Backdrop>
                 }
-                <ViewTable 
+                <ViewTable
+                drawHeader={drawHeader} 
+                drawBody={drawBody}
                 settings = {settings}
                 tableData={tableData}
                 onReloadData={this.onReloadData}
                 defaultPagination={defaultPagination}
                 rowCount={rowCount}
-                onDeleteRow = {this.deleteRowHandler}
-                onChangeRowAccept = {this.changeRowAcceptHandler}
+                onDeleteRow = {settings.fetchFunctions.deleteRow ? this.deleteRowHandler : null}
+                onChangeRowAccept = {settings.fetchFunctions.changeRow ? this.changeRowAcceptHandler : null}
                 enterButtonHandler={this.enterRowHandler}
                 enterPage={enterPage}
-                enterPage={enterPage}
+                advancedTableData={advancedTableData}
                 />
             </React.Fragment>
         )

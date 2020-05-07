@@ -8,8 +8,20 @@ import RegisterError from "./Home";
 import RegisterErrorRoles from "../components/RegisterErrorRoles";
 import { Route } from "react-router";
 import Home from "./Home"
+import HousesPivot from './TableCards/HousesPivot';
+import Pivot from './TableCards/Pivot';
 
 export const list = {
+    housesPivot: {
+        path: '/housespivot/',
+        shortPath: '/housespivot/',
+        component: HousesPivot
+    },
+    pivot: {
+        path: '/pivot/:id',
+        shortPath: '/pivot/',
+        component: Pivot
+    },
     houses: {
         path: '/houses',
         shortPath: '/houses/',

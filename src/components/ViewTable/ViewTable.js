@@ -208,6 +208,8 @@ class ViewTable extends React.Component {
         const {
             settings = {},
             classes,
+            drawHeader,
+            advancedTableData,
         } = this.props;
 
         return (
@@ -217,16 +219,24 @@ class ViewTable extends React.Component {
             {
                 //Object.keys - получаем массив ключей из settings.header (например, такой: [street, district, number])
                 //.map(итерация) - метод, создающий цикл, в котором проходим по каждому ключу
-                Object.keys(settings.headers).map( (headerKey) => (                        
+                Object.keys(settings.headers).map( (headerKey) => {                        
                     //для каждого ключа создаем соответствующую ячейку в заголовке таблицы и вешаем на нее обработчики 
                     //(например при нажатии на открытие контекстного меню с фильтром, или при добавлении (+) фильтра в меню)
-                    <TableCell
+                    
+                    return (<TableCell
                     className = {classes.tableCell}
                     key={headerKey}>
                         {settings.headers[headerKey].value}
-                    </TableCell>)
+                    </TableCell>)}
                 )
                 //в итоге map() - возвращает массив TableCell'ов 
+            }
+            {
+                advancedTableData &&
+                advancedTableData.map((value) => 
+                <TableCell>
+                {value}
+                </TableCell>)
             }
             </TableRow>
         )
@@ -246,7 +256,8 @@ class ViewTable extends React.Component {
             classes,
             enterButtonHandler,
             enterPage,
-
+            drawBody,
+            advancedTableData,
         } = this.props;
 
         const {
@@ -310,7 +321,7 @@ class ViewTable extends React.Component {
                         <TableCell
                         className = {classes.tableCell}>
                             {
-                            id != changeRecord.id && 
+                            id != changeRecord.id && onDeleteRow && 
                             <React.Fragment>
                                 <Tooltip title='Удалить запись'>                        
                                     <IconButton 
@@ -318,14 +329,17 @@ class ViewTable extends React.Component {
                                         <DeleteIcon/>
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip
-                                onClick = { () => onChangeRowHandler(id, value) } 
-                                title='Изменить запись'>
-                                    <IconButton>
-                                        <CreateIcon/>
-                                    </IconButton>
-                                </Tooltip>
                             </React.Fragment>
+                            }
+                            {
+                            id != changeRecord.id && onChangeRowAccept &&
+                            <Tooltip
+                            onClick = { () => onChangeRowHandler(id, value) } 
+                            title='Изменить запись'>
+                                <IconButton>
+                                    <CreateIcon/>
+                                </IconButton>
+                            </Tooltip>
                             }
                             {
                             id == changeRecord.id && 
@@ -368,6 +382,13 @@ class ViewTable extends React.Component {
                                 //для каждого ключа создаем соответствующую ячейку в теле таблицы. 
                                 //Так как название ключей у settings.header - это названия ключей из json,
                                 //то берем данные у элемента, полученного на сервере, с таким же ключом
+
+                                if(id >= 1 && 'group' in settings.headers[headerKey]) {
+                                    if(tableData[id][headerKey] == tableData[id-1][headerKey]) {
+                                        return <TableCell/>;
+                                    }
+                                }
+                                
                                 return (id != changeRecord.id && 
                                 <TableCell
                                 className = {classes.tableCell} 
@@ -387,6 +408,11 @@ class ViewTable extends React.Component {
                             }
                             )
                         }
+                        {   advancedTableData && advancedTableData.map((value, index) => 
+                            <TableCell>
+                            {tableData[id].depth_values[index]}
+                            </TableCell>
+                        )}
                     </TableRow>
                 )
             }
@@ -433,7 +459,7 @@ class ViewTable extends React.Component {
             classes,
             rowCount,
             onReloadData,
-            onBack
+            onBack,
         } = this.props;
 
         const {
@@ -502,7 +528,6 @@ class ViewTable extends React.Component {
                         <TableBody>
                         { this.renderTableBody() }
                         </TableBody>
-
                         <TablePagination
                             rowsPerPageOptions={[5, 10, 15, 25, 50, 75, 100]}
                             count = { rowCount }

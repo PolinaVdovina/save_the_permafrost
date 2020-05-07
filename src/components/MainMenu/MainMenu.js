@@ -52,7 +52,7 @@ class MainMenu extends React.Component {
                 {loggedIn && 
                 <Button
                 component={ NavLink }
-                to={list.houses.shortPath} 
+                to={list.housesPivot.shortPath} 
                 color="inherit">
                     Ведомость и графики
                 </Button>}

@@ -1,6 +1,7 @@
 import { getHouseList, deleteHouse, changeHouse } from "../../https/houses";
 import { getTubeList, deleteTube, changeTube } from "../../https/tubes";
 import { getSampleList, changeSample, deleteSample } from "../../https/tubeSamples";
+import { getPivotList } from "../../https/pivot";
 
 
 export const houseSettings = {
@@ -20,6 +21,27 @@ export const houseSettings = {
         changeRow: changeHouse,
     }
 }
+
+
+
+
+export const housePivotSettings = {
+    title: 'Дома',
+    //enterButtonHandler: (id) => alert('Ты вошёл в дом ' + id + ', долбаёб'),
+    headers: {
+        id:               {value: 'Улица',    type: 'text' },         
+        street:               {value: 'Улица',    type: 'text' },         
+        district:             {value: 'Район',    type: 'district' },         
+        number:               {value: 'Дом',      type: 'text' },         
+        minLayingDepth:       {value: 'Глубина заложения фундамента (мин.)', type: 'float' },
+        maxLayingDepth:       {value: 'Глубина заложения фундамента (макс.)', type: 'float' },
+    },
+
+    fetchFunctions: {
+        getList: getHouseList,
+    }
+}
+
 
 export const tubeSettings = {
     title:'Трубки',
@@ -47,5 +69,18 @@ export const samplesSettings = {
         getList: getSampleList,
         deleteRow: deleteSample,
         changeRow: changeSample,
+    }
+}
+
+export const pivotSettings = {
+    title: 'Ведомость по дому',
+    headers: {
+        tube:              {value: 'Трубка',    type: 'text', group: true },
+        quarter:           {value: 'Квартал',   type: 'integer' },         
+        date:              {value: 'Дата',      type: 'date' }, 
+    },
+
+    fetchFunctions: {
+        getList: getPivotList,
     }
 }
