@@ -2,8 +2,8 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 
-export default function RegisterError() {
+export default function Home() {
     return(
-        <Typography>Тут должна быть домашняя страница. Не видишь? Твои проблемы :)</Typography>
+        <Typography>Домашняя страница</Typography>
     )
 }

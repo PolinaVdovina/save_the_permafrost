@@ -92,7 +92,6 @@ function AuthWindow(props) {
                 password == '' ? setErrorPassword('Заполните пароль') : setErrorPassword('Неверный пароль');
                 break
             case 'OK':
-                alert("ОК");
                 localStorage.setItem('access_token',response.access_token);
                 localStorage.setItem('user_login', userLogin);
                 localStorage.setItem('user_id',response.user_id);     
@@ -160,13 +159,6 @@ function AuthWindow(props) {
             >
               Войти
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Забыли пароль?
-                </Link>
-              </Grid>
-            </Grid>
           </form>
         </div>
       </Grid>
