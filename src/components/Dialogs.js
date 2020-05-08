@@ -12,7 +12,7 @@ export function CreateHouse(props) {
 
     return(
         <Dialog open={open}>
-            <HouseCard close={onClose} isCreate/>
+            <HouseCard close={()=>setOpen(false)} isCreate/>
         </Dialog>
     )
 }

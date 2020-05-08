@@ -537,7 +537,7 @@ class ViewTable extends React.Component {
 
         return (
             <React.Fragment>
-                <CardDialog open={openCard} onClose={() => { this.setState({openCard:false}); this.onReloadData() }} parentId={parentId}/>
+                <CardDialog open={openCard} onClose={() => this.setState({openCard})} parentId={parentId}/>
                 
                 {this.renderFilterDrawer()}
                 {confirmDialog!=null && 
