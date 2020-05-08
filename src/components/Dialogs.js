@@ -12,7 +12,7 @@ export function CreateHouse(props) {
     } = props;
 
     return(
-        <Dialog open={open}>
+        <Dialog open={open} onClose={onClose}>
             <HouseCard onReloadData={onReloadData} close={onClose} isCreate/>
         </Dialog>
     )
@@ -26,7 +26,7 @@ export function CreateTube(props) {
     } = props;
 
     return(
-        <Dialog open={open}>
+        <Dialog open={open} onClose={onClose}>
             <TubeCard onReloadData={onReloadData} parentId={props.parentId} close={onClose} isCreate/>
         </Dialog>
     )
@@ -40,7 +40,7 @@ export function CreateSample(props) {
         onReloadData
     } = props;
     return(
-        <Dialog open={open}>
+        <Dialog open={open} onClose={onClose}>
             <SampleCard onReloadData={onReloadData} parentId={props.parentId} close={onClose} isCreate/>
         </Dialog>
     )
