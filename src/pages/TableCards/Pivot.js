@@ -6,6 +6,7 @@ import { withRouter, Redirect } from 'react-router';
 import { list } from '../pages';
 import { TableHead, TableCell, Table, TableRow, TableBody } from '@material-ui/core';
 import { connect } from 'react-redux';
+import DialogChart from '../../components/DialogChart';
 
 const mapStateToProps = function(state) {
     return {
@@ -130,7 +131,8 @@ class Pivot extends React.Component {
                 settings={pivotSettings}
                 onGetData={this.getDataHandler}
                 addivityTableKey={id}
-                staticFilters={{ tubeId:[{type:'equal',value:id}] }}
+                ChartComponent = {DialogChart}
+                staticFilters={{ houseId:[{type:'equal',value:id}] }} 
                 />
 
             </>

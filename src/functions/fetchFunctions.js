@@ -32,7 +32,7 @@ export function change(type, json) {
     fetch(url, (postGet)).then(response=>response.json())
 }
 
-export function add(type, json) {
+export function add(type, json, next) {
     let url = getUrl(type);
     url += '/add';
 
@@ -45,7 +45,10 @@ export function add(type, json) {
         },
         body: JSON.stringify(json)
     };
-    fetch(url, (postGet)).then(response=>response.json())
+    if (!next)
+        fetch(url, (postGet)).then(response=>response.json())
+    if (next)
+        fetch(url, (postGet)).then(response=>response.json()).then(response => next() )
 }
 
 export function load(type, id, func) {

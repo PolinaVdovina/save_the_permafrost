@@ -58,7 +58,7 @@ export default class HouseCard extends React.Component {
                 json[this.state.object.id.parentIdName] = this.state.object.id.parentId;
             }
             this.props.close();
-            add(this.props.object.type, json);
+            add(this.props.object.type, json, this.props.onReloadData);
         }
             
     }

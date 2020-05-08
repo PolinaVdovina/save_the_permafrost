@@ -20,7 +20,6 @@ import { list } from "./pages";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: '100vh',
     alignItems:'center',
   },
   paper: {
@@ -111,9 +110,9 @@ function AuthWindow(props) {
     )
 
   return (
-    <Grid container component="main" className={classes.root} justify='center' alignItems='center'>
+    <Grid container style={{minHeight:'100vh'}} component="main" className={classes.root} justify='center' alignItems='center'>
       <CssBaseline />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6}>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />

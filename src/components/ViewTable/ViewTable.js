@@ -37,6 +37,9 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {store} from '../../store'
 import {setFilter, setPagination} from '../../actions/FilterActions'
+import TimelineIcon from '@material-ui/icons/Timeline';
+
+
 //Для примера (это полученные с сервера данные о домах в Postman)
 const defaultTableData = [
     {
@@ -86,7 +89,7 @@ class ViewTable extends React.Component {
             //Открыто ли окошко с фильтром?
             isFilterDrawerOpen: false,    
             pagination: defaultPagination,
-
+            openHuiChart: false,
             changeRecord: {
                 id: null,
                 values: {},
@@ -309,7 +312,8 @@ class ViewTable extends React.Component {
             advancedTableData,
             pagination,
             defaultPagination,
-            tableKey
+            tableKey,
+            ChartComponent
         } = this.props;
 
         const {
@@ -413,6 +417,16 @@ class ViewTable extends React.Component {
                                     >
                                         <EnterIcon/>
                                     </IconButton>
+                                </Tooltip>
+                            }
+                            {
+                                ChartComponent &&
+                                <Tooltip title='Построить график'>                        
+                                <IconButton
+                                onClick={()=>this.setState({openHuiChart:true})}
+                                >
+                                    <TimelineIcon/>
+                                </IconButton>
                                 </Tooltip>
                             }
                         </TableCell>
@@ -527,17 +541,30 @@ class ViewTable extends React.Component {
             pagination,
             CardDialog,
             parentId,
+            ChartComponent,
+            tableData,
         } = this.props;
 
         const {
             confirmDialog,
-            openCard
+            openCard,
+            openHuiChart,
         } = this.state;
 
 
         return (
             <React.Fragment>
-                <CardDialog open={openCard} onClose={() => this.setState({openCard})} parentId={parentId}/>
+                {ChartComponent && 
+                <ChartComponent open={openHuiChart} close={() => this.setState({openHuiChart: false}) } data={tableData} />
+                }
+                { 
+                CardDialog && 
+                <CardDialog 
+                open={openCard} 
+                onReloadData = {this.onReloadData}
+                onClose={() => this.setState({openCard:false})} parentId={parentId}
+                />
+                }
                 
                 {this.renderFilterDrawer()}
                 {confirmDialog!=null && 
@@ -553,7 +580,7 @@ class ViewTable extends React.Component {
                     onCancel = { () => this.setState({confirmDialog:null}) }
                     open={true}/>}
                 <Paper className = {classes.paper}>
-                    <Toolbar>
+                    <Toolbar className={classes.tableButtonsDiv}>
                         {
                         onBack && 
                         <Tooltip title='Назад'>
@@ -586,15 +613,16 @@ class ViewTable extends React.Component {
                                 className={classes.filterButtonIcon}/>
                             </IconButton>
                         </Tooltip>
-                        <Tooltip title='Добавить запись'>
+                        {CardDialog && <Tooltip title='Добавить запись'>
                             <IconButton
                             onClick={() => this.setState({openCard:true})}
                             className={classes.filterButton}>
                                 <AddIcon
                                 className={classes.filterButtonIcon}/>
                             </IconButton>
-                        </Tooltip>
+                        </Tooltip>}
                     </Toolbar>
+                    <div className={classes.scroll}>
                     <Table style={{ tableLayout: 'auto' }} fixedHeader={false}>
                         <TableHead className = {classes.tableHead}>
                         { this.renderTableHeaders() }
@@ -603,8 +631,13 @@ class ViewTable extends React.Component {
                         <TableBody>
                         { this.renderTableBody() }
                         </TableBody>
+
+                    </Table>
+                    
+                    </div>
+                    <Grid container style={{justifyContent:'right'}}>
                         <TablePagination
-                            rowsPerPageOptions={[1, 10, 15, 25, 50, 75, 100]}
+                            rowsPerPageOptions={[5, 10, 15, 25, 50, 75, 100]}
                             count = { rowCount }
                             rowsPerPage = { pagination[tableKey] ? pagination[tableKey].rowsPerPage : defaultPagination.rowsPerPage }
                             page = { pagination[tableKey] ? pagination[tableKey].currentPage : defaultPagination.currentPage }
@@ -612,7 +645,7 @@ class ViewTable extends React.Component {
                             onChangePage = {this.onChangePageHandler}
                             labelRowsPerPage='Строк на странице'
                         />
-                    </Table>
+                    </Grid>
                 </Paper>
             </React.Fragment>
         )

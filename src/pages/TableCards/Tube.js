@@ -5,6 +5,7 @@ import TubeCard from '../../components/TubeCard';
 import { withRouter, Redirect } from 'react-router';
 import { list } from '../pages';
 import { connect } from 'react-redux';
+import { CreateSample } from '../../components/Dialogs';
 
 const mapStateToProps = function(state) {
     return {
@@ -39,7 +40,8 @@ class Tube extends React.Component {
                 addivityTableKey={id}
                 staticFilters={{ tubeId:[{type:'equal',value:id}] }}
                 settings={samplesSettings}
-                
+                CardDialog = {CreateSample}
+                parentId = {id}
                 />
             </>
         )

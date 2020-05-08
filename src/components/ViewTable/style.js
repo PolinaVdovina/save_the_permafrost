@@ -15,7 +15,9 @@ export const useStyles = (theme) => ({
         width: '32px',
         height: '32px'
     },
-    
+    tableButtonsDiv: {
+        
+    },
     tableCell: {
         width: '150px'
     },
@@ -25,9 +27,12 @@ export const useStyles = (theme) => ({
         width: '420px'
     },
 
+    scroll: {
+        overflowX: 'auto'   
+    },
     paper: {
-        overflow: 'hidden',
         
+              
     },
 
     headerCell: {

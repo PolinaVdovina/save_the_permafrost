@@ -82,9 +82,12 @@ export default class TubeCard extends React.Component {
             <div>
                 {this.state.flag && 
                     <Card 
+                        onReloadData={this.props.onReloadData}
                         object={this.state.object} 
                         changesActive={this.props.isCreate ? true : false} 
-                        isCreate={this.props.isCreate}>
+                        isCreate={this.props.isCreate}
+                        close={this.props.close}
+                        >
                     </Card>
                 }
             </div>

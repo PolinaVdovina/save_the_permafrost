@@ -101,6 +101,7 @@ export default class HouseCard extends React.Component {
             <div>
                 {this.state.flag && 
                     <Card 
+                        onReloadData={this.props.onReloadData}
                         object={this.state.object} 
                         close={this.props.close} 
                         changesActive={this.props.isCreate ? true : false} 

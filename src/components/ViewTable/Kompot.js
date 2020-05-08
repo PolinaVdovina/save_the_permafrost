@@ -164,6 +164,7 @@ class Kompot extends React.Component {
             tableKey,
             CardDialog,
             parentId,
+            ChartComponent
         } = this.props;
         
         const {
@@ -171,7 +172,7 @@ class Kompot extends React.Component {
             rowCount = 0,
             isFetching,
             fetchErrorDialog,
-            advancedTableData
+            advancedTableData,
         } = this.state;
 
         if(!filter[settings.tableKey + addivityTableKey])
@@ -210,6 +211,7 @@ class Kompot extends React.Component {
                 tableKey={settings.tableKey + addivityTableKey}
                 CardDialog = {CardDialog}
                 parentId={parentId}
+                ChartComponent={ChartComponent}
                 />
             </React.Fragment>
         )
