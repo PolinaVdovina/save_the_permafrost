@@ -56,7 +56,13 @@ export default class SampleCard extends React.Component {
     render() {
         return(
             <div>
-                {this.state.flag && <Card object={this.state.object} changesActive={false} isCreate={this.props.isCreate}></Card>}
+                {this.state.flag && 
+                    <Card 
+                        object={this.state.object} 
+                        changesActive={this.props.isCreate ? true : false} 
+                        isCreate={this.props.isCreate}>
+                    </Card>
+                }
             </div>
         )
     }
