@@ -39,6 +39,7 @@ class Tube extends React.Component {
                 addivityTableKey={id}
                 staticFilters={{ tubeId:[{type:'equal',value:id}] }}
                 settings={samplesSettings}
+                
                 />
             </>
         )
