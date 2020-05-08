@@ -7,7 +7,8 @@ import { Grid, Typography, Avatar } from '@material-ui/core';
 function massToObjects(mass) {
     let result = [];
     for (let i = 0; i < mass.length; i++) {
-        result.push({x: mass[i], y: i+1});
+        if (mass[i] != "-") 
+            result.push({x: mass[i], y: i+1});
     }
     return result;
 }
