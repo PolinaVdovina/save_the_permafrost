@@ -72,7 +72,7 @@ const defaultTableData = [
 class ViewTable extends React.Component {
     constructor(props) {
         super(props);
-       
+        
         const {
             settings = {},
             defaultPagination = {
@@ -82,6 +82,7 @@ class ViewTable extends React.Component {
         } = props;
         
         this.state = {
+            openCard: false,
             //Открыто ли окошко с фильтром?
             isFilterDrawerOpen: false,    
             pagination: defaultPagination,
@@ -523,17 +524,21 @@ class ViewTable extends React.Component {
             filter,
             tableKey,
             defaultPagination,
-            pagination
+            pagination,
+            CardDialog,
+            parentId,
         } = this.props;
 
         const {
             confirmDialog,
+            openCard
         } = this.state;
 
-    
 
         return (
             <React.Fragment>
+                <CardDialog open={openCard} onClose={() => { this.setState({openCard:false}); this.onReloadData() }} parentId={parentId}/>
+                
                 {this.renderFilterDrawer()}
                 {confirmDialog!=null && 
                     <ConfirmDialog
@@ -583,6 +588,7 @@ class ViewTable extends React.Component {
                         </Tooltip>
                         <Tooltip title='Добавить запись'>
                             <IconButton
+                            onClick={() => this.setState({openCard:true})}
                             className={classes.filterButton}>
                                 <AddIcon
                                 className={classes.filterButtonIcon}/>

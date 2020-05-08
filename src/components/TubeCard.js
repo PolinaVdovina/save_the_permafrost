@@ -80,7 +80,7 @@ export default class TubeCard extends React.Component {
     render() {
         return(
             <div>
-                {this.state.flag && <Card object={this.state.object}></Card>}
+                {this.state.flag && <Card object={this.state.object} changesActive={false} isCreate={this.props.isCreate}></Card>}
             </div>
         )
     }

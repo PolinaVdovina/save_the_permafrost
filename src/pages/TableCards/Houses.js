@@ -5,6 +5,7 @@ import HouseCard from '../../components/HouseCard';
 import { list } from '../pages';
 import { withRouter, Redirect } from 'react-router';
 import { connect } from 'react-redux';
+import { CreateHouse } from '../../components/Dialogs';
 
 
 const mapStateToProps = function(state) {
@@ -39,7 +40,9 @@ class Houses extends React.Component {
 
                 <Kompot 
                 enterPage={list.house.shortPath}
-                settings={houseSettings}/>
+                settings={houseSettings}
+                CardDialog = {CreateHouse}
+                />
             </>
         )
     }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Grid, TextField, Paper, IconButton } from '@material-ui/core';
+import { Typography, Grid, TextField, Paper, IconButton, Button } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import SaveIcon from '@material-ui/icons/Save';
 import {change, add} from '../functions/fetchFunctions'
@@ -38,7 +38,7 @@ export default class HouseCard extends React.Component {
         super(props);
         
         this.state = {
-            isChangesActive: false,
+            isChangesActive: props.changesActive,
             ...props 
         };
     }
@@ -57,6 +57,7 @@ export default class HouseCard extends React.Component {
             if (this.state.object.id.parentId != '' && this.state.object.id.parentId != undefined) {
                 json[this.state.object.id.parentIdName] = this.state.object.id.parentId;
             }
+            this.props.close();
             add(this.props.object.type, json);
         }
             
@@ -93,11 +94,12 @@ export default class HouseCard extends React.Component {
             <Grid container  justify="left" alignItems="center">
                 <Grid item component={Paper} elevation={3} square style={{padding:'32px'}}>
                     <Typography variant="h3">
-                        {this.props.object.title}   {!this.state.isChangesActive && <IconButton onClick={()=> this.setState({isChangesActive: true})}><CreateIcon/></IconButton>}
-                        {this.state.isChangesActive && <IconButton onClick={()=> this.saveHandler()}><SaveIcon/></IconButton>}
+                        {this.props.object.title}   {(!this.state.isChangesActive && !this.props.isCreate) && <IconButton onClick={()=> this.setState({isChangesActive: true})}><CreateIcon/></IconButton>}
+                        {(this.state.isChangesActive && !this.props.isCreate) && <IconButton onClick={()=> this.saveHandler()}><SaveIcon/></IconButton>}
                     </Typography>                   
                     <hr></hr>
-                    {list}                   
+                    {list} 
+                    {this.props.isCreate && <Button variant="contained" color="primary" onClick={()=> this.saveHandler()}>Сохранить</Button>}                  
                 </Grid>
             </Grid> 
         )

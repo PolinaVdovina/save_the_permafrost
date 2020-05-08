@@ -5,6 +5,7 @@ import HouseCard from '../../components/HouseCard';
 import { withRouter, Redirect } from 'react-router';
 import { list } from '../pages';
 import { connect } from 'react-redux';
+import { CreateTube } from '../../components/Dialogs';
 
 const mapStateToProps = function(state) {
     return {
@@ -13,6 +14,7 @@ const mapStateToProps = function(state) {
       roles: state.auth.roles,
     }
 }
+
 
 class House extends React.Component {
     constructor(props) {
@@ -34,12 +36,14 @@ class House extends React.Component {
             <>
                 {!loggedIn && <Redirect to={list.authError.shortPath}/>}
                 {roles && !((roles.find(r => r=='ChangeRecord'))||(roles.find(r => r=='SuperUser'))) && <Redirect to={list.rolesError.path}/>}
-                <HouseCard id={id}/>
+                <HouseCard id={id} isCreate={false}/>
                 <Kompot
                 enterPage={list.tube.shortPath}
                 staticFilters={{ houseId:[{type:'equal',value:id}] }} 
                 settings={tubeSettings}
-                addivityTableKey={id}/>
+                addivityTableKey={id}
+                CardDialog = {CreateTube}
+                parentId={id}/>
             </>
         )
     }

@@ -58,6 +58,7 @@ class Kompot extends React.Component {
             tableData: [],
             rowCount: 0,
             redirectTo: null,
+            
         };
         const {
             addivityTableKey=''
@@ -160,7 +161,9 @@ class Kompot extends React.Component {
             drawBody,
             addivityTableKey='',
             filter,
-            tableKey
+            tableKey,
+            CardDialog,
+            parentId,
         } = this.props;
         
         const {
@@ -205,6 +208,8 @@ class Kompot extends React.Component {
                 enterPage={enterPage}
                 advancedTableData={advancedTableData}
                 tableKey={settings.tableKey + addivityTableKey}
+                CardDialog = {CardDialog}
+                parentId={parentId}
                 />
             </React.Fragment>
         )

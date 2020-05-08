@@ -4,7 +4,6 @@ import { samplesSettings } from '../../components/ViewTable/tableSettings'
 import TubeCard from '../../components/TubeCard';
 import { withRouter, Redirect } from 'react-router';
 import { list } from '../pages';
-import SampleCard from '../../components/SampleCard';
 import { connect } from 'react-redux';
 
 const mapStateToProps = function(state) {
@@ -35,11 +34,12 @@ class Tube extends React.Component {
             <>
                 {!loggedIn && <Redirect to={list.authError.shortPath}/>}
                 {roles && !((roles.find(r => r=='ChangeRecord'))||(roles.find(r => r=='SuperUser'))) && <Redirect to={list.rolesError.path}/>}
-                <TubeCard id={id} />
+                <TubeCard id={id} isCreate={false}/>
                 <Kompot
                 addivityTableKey={id}
                 staticFilters={{ tubeId:[{type:'equal',value:id}] }}
-                settings={samplesSettings}/>
+                settings={samplesSettings}
+                />
             </>
         )
     }
