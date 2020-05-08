@@ -25,14 +25,16 @@ export default class Chart extends React.Component {
     }
 
     componentWillMount() {
-        let temp = this.props.data; 
+        //let temp = {...this.props.data}; 
+        let temp = [];
         let maxX = 0; let minX = 100;
         let maxY = 0;
-        for (let i = 0; i < temp.length; i++) {           
-            if (Math.max.apply(Math, temp[i].depth_values) > maxX) maxX = Math.max.apply(Math, temp[i].depth_values);
-            if (Math.min.apply(Math, temp[i].depth_values) < minX) minX = Math.min.apply(Math, temp[i].depth_values);
-            if (temp[i].depth_values.length > maxY) maxY = temp[i].depth_values.length;
-            temp[i].depth_values = massToObjects(temp[i].depth_values);
+        for (let i = 0; i < this.props.data.length; i++) {           
+            if (Math.max.apply(Math, this.props.data[i].depth_values) > maxX) maxX = Math.max.apply(Math, this.props.data[i].depth_values);
+            if (Math.min.apply(Math, this.props.data[i].depth_values) < minX) minX = Math.min.apply(Math, this.props.data[i].depth_values);
+            if (this.props.data[i].depth_values.length > maxY) maxY = this.props.data[i].depth_values.length;
+            temp.push({});
+            temp[i].depth_values = massToObjects(this.props.data[i].depth_values);
             let strColor = '#' + (Math.random().toString(16) + '000000').substring(2,8).toUpperCase();
             temp[i].color = strColor; 
         }    
@@ -40,6 +42,7 @@ export default class Chart extends React.Component {
     }
 
     render() {
+
         return(
         <Grid container direction="row" alignItems="center">
             <Grid item style={{flexGrow: 1}}>

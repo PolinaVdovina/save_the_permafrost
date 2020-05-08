@@ -562,7 +562,8 @@ class ViewTable extends React.Component {
                 <CardDialog 
                 open={openCard} 
                 onReloadData = {this.onReloadData}
-                onClose={() => this.setState({openCard:false})} parentId={parentId}
+                onClose={() => this.setState({openCard:false})} 
+                parentId={parentId}
                 />
                 }
                 
