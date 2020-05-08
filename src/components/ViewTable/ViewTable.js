@@ -34,6 +34,9 @@ import {getHouseList} from '../../https/houses'
 import ConfirmDialog from './ConfirmDialog';
 import BackIcon from '@material-ui/icons/ArrowBackIos';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import {store} from '../../store'
+import {setFilter, setPagination} from '../../actions/FilterActions'
 //Для примера (это полученные с сервера данные о домах в Postman)
 const defaultTableData = [
     {
@@ -54,10 +57,22 @@ const defaultTableData = [
     }
   ]
 
+
+  const mapStateToProps = function(state) {
+    return {
+      loggedIn: state.auth.loggedIn,
+      login: state.auth.login,
+      filter: state.filters.filter,
+      pagination: state.filters.pagination,
+    }
+}
+
+
 //Еее, наш основной компонент
 class ViewTable extends React.Component {
     constructor(props) {
         super(props);
+       
         const {
             settings = {},
             defaultPagination = {
@@ -95,22 +110,56 @@ class ViewTable extends React.Component {
         //по умолчанию состояние фильтра - это массивы для каждого из ключей с одним незаполненным фильтром
         //Object.keys(словарь) - получаем массив из всех ключей в словаре [street, number, ...]
         //.map - перебираем каждый элемент массива, то есть ключ. Для каждого ключа задаем состояние по умолчанию.
-        Object.keys(settings.headers).map(key => this.state.filter[key] = [{ value: '', type: typeSelectors[settings.headers[key].type][0], Component: TextField  }] );
+       // Object.keys(settings.headers).map(key => this.state.filter[key] = [{ value: '', type: typeSelectors[settings.headers[key].type][0], Component: TextField  }] );
+       
+    }
+    checkPage = () => {
+        const {
+            filter,
+            pagination,
+            tableKey,
+            defaultPagination,
+            rowCount,
+            onReloadData
+        } = this.props;
+        if(rowCount > 0) {
+
+            let actPag = pagination[tableKey] ? pagination[tableKey] : defaultPagination;
+            if (actPag.currentPage * actPag.rowsPerPage > rowCount - 1) {
+                const newPag ={...actPag, currentPage: (rowCount-1) / actPag.rowsPerPage};
+                store.dispatch( setPagination(tableKey, newPag) );
+                onReloadData && onReloadData(filter[tableKey], newPag)
+            }
+        }    
     }
 
+    onReloadData = (options) => {
+        const {
+            filter,
 
-    componentDidMount() {
-        getHouseList(
-            (houseList) => {
-                
-            }
-        );
+            tableKey,
+            defaultPagination,
+            onReloadData
+        } = this.props;
+        let pagination = this.props.pagination[tableKey] ? this.props.pagination[tableKey] : defaultPagination
+        if(options)
+            if(options.pagination)
+                pagination = options.pagination
+        onReloadData && onReloadData(filter[tableKey], pagination, this.checkPage);
     }
 
     //Закрыть меню с фильтрами
     closeFilterDrawer = () => {
+        const {
+            filter,
+            pagination,
+            tableKey,
+            defaultPagination,
+            onReloadData
+        } = this.props;
+        
         this.setState( {isFilterDrawerOpen: false} );
-        this.props.onReloadData && this.props.onReloadData(this.state.filter, this.state.pagination);
+        this.onReloadData();
     }
 
     //Открыть меню с фильтрами
@@ -128,25 +177,24 @@ class ViewTable extends React.Component {
     renderFilterDrawer = () => {
         const {
             settings = {},
-            classes
+            classes,
+            filter,
+            tableKey
         } = this.props;
 
         const {
             isFilterDrawerOpen,
-            filter,
+            
         } = this.state;
 
         //Обработчик события при добавления фильтра (+) в контекстном меню
         const onAddClickHandler = (event, headerKey) => {
-            this.setState( (oldState) => ({
-                    //Новое состояние фильтра - это старое состояние фильтра (...oldState.filter) + новое значение фильтра по данному ключу,
-                    //в который мы ДОБАВЛЯЕМ новый фильтр, а не перееопределяем его полностью (для этого ...oldState.filter[headerKey])
-                    filter: {
-                        ...oldState.filter,    
-                        [headerKey]: [...oldState.filter[headerKey], {value:'', type: typeSelectors[settings.headers[headerKey].type][0]}]   
-                    }
-                }) 
-            );
+            const oldState = filter[tableKey];
+            store.dispatch( setFilter(tableKey, {
+                ...oldState,    
+                [headerKey]: [...oldState[headerKey], {value:'', type: typeSelectors[settings.headers[headerKey].type][0]}]   
+            }) );
+            
         }
 
         //Обработчик события при удалении фильтра (корзина) в контекстном меню
@@ -155,46 +203,46 @@ class ViewTable extends React.Component {
         //индекс элемента фильтра из массива (он получается из дочернего компонента через props)
         //другого способа передать в аргументы функции информацию из текущего и дочернего элемента одновременно я не нашел...
         const onDeleteClickHandler = (event, headerKey, index) => {
-            this.setState( oldState => {
-                if (oldState.filter[headerKey].length > 1) {
-                    const newFilter = oldState.filter[headerKey].filter((value, ind) => index != ind );
-                    return { filter: {...oldState.filter, [headerKey]:newFilter } }
-                }
-                else {
-                    const newFilter = [{ value: '', type: oldState.filter[headerKey][0].type }];
-                    return { filter: {...oldState.filter, [headerKey]:newFilter } }
-                }
-            } );
+            const oldState = filter[tableKey];
+            if (oldState[headerKey].length > 1) {
+                const newFilter = oldState[headerKey].filter((value, ind) => index != ind );
+                store.dispatch(
+                    setFilter(tableKey, { ...oldState, [headerKey]:newFilter } ),
+                );      
+            }
+            else {
+                const newFilter = [{ value: '', type: oldState[headerKey][0].type }];
+                store.dispatch(
+                    setFilter(tableKey, { ...oldState, [headerKey]:newFilter  } ),
+                );      
+            }
+
         }
         
         //Обработчик изменения фильтра
         const onChangeHandler = (event, headerKey, index, isSelectorChanged) => {
             let newFilter = {};
             if(isSelectorChanged) {
-                if(selectors[filter[headerKey][index].type].variant == selectors[event.target.value].variant)
-                    newFilter = { value: filter[headerKey][index].value, type: event.target.value}
+                if(selectors[filter[tableKey][headerKey][index].type].variant == selectors[event.target.value].variant)
+                    newFilter = { value: filter[tableKey][headerKey][index].value, type: event.target.value}
                 else
                     newFilter = { value: '', type: event.target.value}
             }
             else
-                newFilter = { value: event.target.value, type: filter[headerKey][index].type}
+                newFilter = { value: event.target.value, type: filter[tableKey][headerKey][index].type}
 
-            
-            this.setState( (oldState) => {
-                //Новое состояние фильтра - это старое состояние фильтра (...oldState.filter) + новое значение фильтра по данному ключу,
-                //в который мы ДОБАВЛЯЕМ новый фильтр, а не перееопределяем его полностью (для этого ...oldState.filter[headerKey])
-                oldState.filter[headerKey][index] = newFilter;
-                return {filter: {
-                    ...oldState.filter,     
-                }}
-            } );     
-
+            const oldState = filter[tableKey];
+            oldState[headerKey][index] = newFilter;
+            store.dispatch(
+                setFilter(tableKey, oldState),
+            );                
+       
         }
         
         return (
             <FilterDrawer 
             headers = {settings.headers}
-            filters = {filter}
+            filters = {filter[tableKey]}
             open={isFilterDrawerOpen} 
             onChange = {onChangeHandler}
             onDelete={onDeleteClickHandler}
@@ -258,12 +306,15 @@ class ViewTable extends React.Component {
             enterPage,
             drawBody,
             advancedTableData,
+            pagination,
+            defaultPagination,
+            tableKey
         } = this.props;
 
         const {
             isFilterDrawerOpen,
             filter,
-            pagination,
+            
             changeRecord,
             confirmDialog
         } = this.state;
@@ -292,22 +343,14 @@ class ViewTable extends React.Component {
 
 
         const onChangeRowAcceptHandler = (id) => {
-            onChangeRowAccept(id, changeRecord.values, () => onReloadData(filter, pagination) ); 
+            onChangeRowAccept(id, changeRecord.values, () => onReloadData(filter,pagination[tableKey] ? pagination[tableKey] : defaultPagination) ); 
             this.closeChangeRecord();
         }
 
         const onDeleteRowHandler = (id, value) => {
             //Проверяем, что мы не находимся на странице, индекс которой больше, чем всего страниц
-            const checkPage = () => {
-                if(rowCount > 0) {
-                    if (pagination.currentPage * pagination.rowsPerPage > rowCount - 1) {
-                        const newPag = {...pagination, currentPage: pagination.currentPage-1};
-                        this.setState( { pagination: newPag  });
-                        onReloadData && onReloadData(filter, newPag)
-                    }
-                }    
-            }
-            onDeleteRow && onDeleteRow(id, value, () => onReloadData(filter,pagination, this.checkPage))
+
+            onDeleteRow && onDeleteRow(id, value, () => onReloadData(filter,pagination[tableKey] ? pagination[tableKey] : defaultPagination, this.checkPage))
         }
 
         return (
@@ -423,34 +466,51 @@ class ViewTable extends React.Component {
     onChangeRowsPerPageHandler = (event) => {
         const {
             onChangePerPage,
-            onReloadData
+            onReloadData,
+            filter,
+            tableKey,
+            pagination,
+            defaultPagination
         } = this.props;
 
+        if(!pagination[tableKey]) {
+            store.dispatch(setPagination(tableKey, defaultPagination));
+        }
+
         const newPag = {
-            ...this.state.pagination,
             currentPage: 0,
             rowsPerPage: Number(event.target.value)
         }
-        this.setState({pagination: newPag});
 
+        store.dispatch(setPagination(tableKey, newPag));
+        
         if(onChangePerPage)
             onChangePerPage(event.target.value);
         
         this.closeChangeRecord();
-        onReloadData && onReloadData(this.state.filter, newPag);
+        this.onReloadData({pagination: newPag});
     }
 
     onChangePageHandler = (event,newPage) => {
         const {
-            onReloadData
+            onReloadData,
+            tableKey,
+            filter,
+            pagination,
+            defaultPagination
         } = this.props;
+
+        if(!pagination[tableKey]) {
+            store.dispatch(setPagination(tableKey, defaultPagination));
+        }
+
         const newPag = {
-            ...this.state.pagination,
+            ...pagination[tableKey],
             currentPage: newPage , 
         }
-        this.setState({pagination: newPag});
+        store.dispatch(setPagination(tableKey, newPag));
         this.closeChangeRecord();
-        onReloadData && onReloadData(this.state.filter, newPag);
+        this.onReloadData({pagination: newPag});
     }
 
     render() {
@@ -460,15 +520,17 @@ class ViewTable extends React.Component {
             rowCount,
             onReloadData,
             onBack,
+            filter,
+            tableKey,
+            defaultPagination,
+            pagination
         } = this.props;
 
         const {
-            pagination,
             confirmDialog,
-            filter
         } = this.state;
 
-
+    
 
         return (
             <React.Fragment>
@@ -491,7 +553,7 @@ class ViewTable extends React.Component {
                         onBack && 
                         <Tooltip title='Назад'>
                             <IconButton
-                            onClick = {() => onReloadData(filter, pagination) }
+                            onClick = {() => this.onReloadData() }
                             className={classes.filterButton}>
                                 <BackIcon 
                                 className={classes.filterButtonIcon}/>
@@ -505,7 +567,7 @@ class ViewTable extends React.Component {
                         </Typography>
                         <Tooltip title='Обновить'>
                             <IconButton
-                            onClick = {() => onReloadData(filter, pagination) }
+                            onClick = {() => this.onReloadData() }
                             className={classes.filterButton}>
                                 <RefreshIcon 
                                 className={classes.filterButtonIcon}/>
@@ -519,6 +581,13 @@ class ViewTable extends React.Component {
                                 className={classes.filterButtonIcon}/>
                             </IconButton>
                         </Tooltip>
+                        <Tooltip title='Добавить запись'>
+                            <IconButton
+                            className={classes.filterButton}>
+                                <AddIcon
+                                className={classes.filterButtonIcon}/>
+                            </IconButton>
+                        </Tooltip>
                     </Toolbar>
                     <Table style={{ tableLayout: 'auto' }} fixedHeader={false}>
                         <TableHead className = {classes.tableHead}>
@@ -529,10 +598,10 @@ class ViewTable extends React.Component {
                         { this.renderTableBody() }
                         </TableBody>
                         <TablePagination
-                            rowsPerPageOptions={[5, 10, 15, 25, 50, 75, 100]}
+                            rowsPerPageOptions={[1, 10, 15, 25, 50, 75, 100]}
                             count = { rowCount }
-                            rowsPerPage = { pagination.rowsPerPage }
-                            page = { pagination.currentPage }
+                            rowsPerPage = { pagination[tableKey] ? pagination[tableKey].rowsPerPage : defaultPagination.rowsPerPage }
+                            page = { pagination[tableKey] ? pagination[tableKey].currentPage : defaultPagination.currentPage }
                             onChangeRowsPerPage = { this.onChangeRowsPerPageHandler }
                             onChangePage = {this.onChangePageHandler}
                             labelRowsPerPage='Строк на странице'
@@ -544,4 +613,4 @@ class ViewTable extends React.Component {
     }
 }
 
-export default  withStyles(useStyles)(ViewTable);  //хуков для стилей у меня нет блять (классы сука), поэтому экспорт делается так
+export default connect(mapStateToProps)(withStyles(useStyles)(ViewTable));  //хуков для стилей у меня нет блять (классы сука), поэтому экспорт делается так

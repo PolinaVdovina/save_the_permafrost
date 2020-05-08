@@ -12,6 +12,7 @@ const mapStateToProps = function(state) {
     return {
       loggedIn: state.auth.loggedIn,
       login: state.auth.login,
+      roles: state.auth.roles,
     }
   }
   
@@ -30,7 +31,8 @@ class MainMenu extends React.Component {
         const {
            classes,
            loggedIn,
-           login
+           login,
+           roles=[],
         } = this.props;
 
         return(
@@ -49,6 +51,15 @@ class MainMenu extends React.Component {
                     Авторизация
                 </Button>}
 
+
+                {roles && ((roles.find(r => r=='ChangeUser'))||(roles.find(r => r=='SuperUser'))) &&
+                <Button
+                component={ NavLink }
+                to={list.register.path} 
+                color="inherit">
+                    Добавить пользователя
+                </Button>}
+
                 {loggedIn && 
                 <Button
                 component={ NavLink }
@@ -57,8 +68,7 @@ class MainMenu extends React.Component {
                     Ведомость и графики
                 </Button>}
 
-
-                {loggedIn && 
+                {roles && ((roles.find(r => r=='ChangeRecord'))||(roles.find(r => r=='SuperUser'))) &&
                 <Button
                 component={ NavLink }
                 to={list.houses.shortPath} 

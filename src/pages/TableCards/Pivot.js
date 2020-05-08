@@ -1,10 +1,19 @@
 import React from 'react';
-import { Kompot } from '../../components/ViewTable/Kompot';
+import Kompot from '../../components/ViewTable/Kompot';
 import { samplesSettings, pivotSettings } from '../../components/ViewTable/tableSettings'
 import HouseCard from '../../components/HouseCard';
-import { withRouter } from 'react-router';
+import { withRouter, Redirect } from 'react-router';
 import { list } from '../pages';
 import { TableHead, TableCell, Table, TableRow, TableBody } from '@material-ui/core';
+import { connect } from 'react-redux';
+
+const mapStateToProps = function(state) {
+    return {
+      loggedIn: state.auth.loggedIn,
+      login: state.auth.login,
+      roles: state.auth.roles,
+    }
+}
 
 class Pivot extends React.Component {
     constructor(props) {
@@ -107,15 +116,20 @@ class Pivot extends React.Component {
         const {
             init=false
         } = this.state;
-
+        const {
+            roles,
+            loggedIn
+        } = this.props;
         const id = this.props.match.params.id;
         return(
             <>
+                {!loggedIn && <Redirect to={list.authError.shortPath}/>}
                 <Kompot
                 drawHeader={init ? this.drawHeader : null}
                 drawBody={init ? this.drawBody : null}
                 settings={pivotSettings}
                 onGetData={this.getDataHandler}
+                addivityTableKey={id}
                 staticFilters={{ tubeId:[{type:'equal',value:id}] }}
                 />
 
@@ -124,4 +138,4 @@ class Pivot extends React.Component {
     }
 } 
 
-export default withRouter(Pivot)
+export default connect(mapStateToProps)(withRouter(Pivot))

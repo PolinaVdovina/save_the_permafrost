@@ -6,6 +6,25 @@ import { getSampleList, changeSample, deleteSample } from "../../https/tubeSampl
 import { Backdrop, CircularProgress, DialogTitle, DialogActions, Dialog, Button, DialogContent } from "@material-ui/core";
 import zIndex from "@material-ui/core/styles/zIndex";
 import { Redirect } from "react-router";
+import { connect } from "react-redux";
+import { store } from "../../store";
+import {setFilter, setPagination} from '../../actions/FilterActions'
+import { typeSelectors } from "./filterSelectors";
+function defaultFilters(settings) {
+    let dict = {};
+    Object.keys(settings.headers).map(key => dict[key] = [{ value: '', type: typeSelectors[settings.headers[key].type][0]  }] );
+    return dict;
+}
+
+const mapStateToProps = function(state) {
+    return {
+        loggedIn: state.auth.loggedIn,
+        login: state.auth.login,
+        filter: state.filters.filter,
+        pagination: state.filters.pagination,
+        }
+    }   
+
 
 const defaultSettings = {
     title: 'Дома',
@@ -24,12 +43,12 @@ const defaultSettings = {
     },
 
     //Действие, которое вызывается, когда мы 'входим в сущность' (Например, при входе в дом показываются его замеры)
-    enterButtonHandler: (id) => alert('Ты вошёл в дом ' + id + ', долбаёб'),
+    //enterButtonHandler: (id) => alert('Ты вошёл в дом ' + id + ', долбаёб'),
 }
 
 
 //Table Fetcher
-export class Kompot extends React.Component {
+class Kompot extends React.Component {
     constructor(props) {
         super(props);
         
@@ -40,6 +59,14 @@ export class Kompot extends React.Component {
             rowCount: 0,
             redirectTo: null,
         };
+        const {
+            addivityTableKey=''
+        } = props;
+        const tableKey = props.settings.tableKey + addivityTableKey;
+        if(!props.filter[tableKey]) {
+            store.dispatch( setFilter(tableKey, defaultFilters(props.settings)) );
+        }
+
     }
     
     getData = (filter, pagination, next) => {
@@ -61,7 +88,8 @@ export class Kompot extends React.Component {
                     isFetching: false,
                     advancedTableData: data[advancedTableData]
                 });
-               
+                
+
             },
             onFailed: () => {
                 this.setState({isFetching: false, fetchErrorDialog: true});
@@ -80,9 +108,13 @@ export class Kompot extends React.Component {
                 rowsPerPage:10,
                 rowCount: 0,
             },
+            filter,
             defaultFilter = {},
+            settings,
+            pagination,
+            addivityTableKey=''
         } = this.props;
-        this.getData(defaultFilter, defaultPagination);
+        this.getData(filter[settings.tableKey+addivityTableKey], pagination[settings.tableKey+addivityTableKey] ? pagination[settings.tableKey+addivityTableKey] : defaultPagination);
     }
 
     onReloadData = (filter, pagination, next) => {
@@ -126,7 +158,9 @@ export class Kompot extends React.Component {
             },
             drawHeader,
             drawBody,
-            
+            addivityTableKey='',
+            filter,
+            tableKey
         } = this.props;
         
         const {
@@ -137,7 +171,8 @@ export class Kompot extends React.Component {
             advancedTableData
         } = this.state;
 
-
+        if(!filter[settings.tableKey + addivityTableKey])
+            return null;
         return (
             <React.Fragment>
                 <Dialog open={fetchErrorDialog==true}>
@@ -169,8 +204,11 @@ export class Kompot extends React.Component {
                 enterButtonHandler={this.enterRowHandler}
                 enterPage={enterPage}
                 advancedTableData={advancedTableData}
+                tableKey={settings.tableKey + addivityTableKey}
                 />
             </React.Fragment>
         )
     }
 }
+
+export default connect(mapStateToProps)(Kompot)

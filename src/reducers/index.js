@@ -1,4 +1,4 @@
 module.exports = {
-    //'userInfo': require('./userinfo-reducers').default,
     'auth': require('./auth').default,
+    'filters': require('./filters').default,
 }

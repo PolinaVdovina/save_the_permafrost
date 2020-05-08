@@ -5,7 +5,8 @@ import { getPivotList } from "../../https/pivot";
 
 
 export const houseSettings = {
-    title: 'Дома',
+    title: 'Дома', 
+    tableKey:'houses',
     //enterButtonHandler: (id) => alert('Ты вошёл в дом ' + id + ', долбаёб'),
     headers: {
         street:               {value: 'Улица',    type: 'text' },         
@@ -27,6 +28,7 @@ export const houseSettings = {
 
 export const housePivotSettings = {
     title: 'Дома',
+    tableKey:'housesPivot',
     //enterButtonHandler: (id) => alert('Ты вошёл в дом ' + id + ', долбаёб'),
     headers: {
         id:               {value: 'Улица',    type: 'text' },         
@@ -44,9 +46,10 @@ export const housePivotSettings = {
 
 
 export const tubeSettings = {
-    title:'Трубки',
+    title:'Скважины',
+    tableKey:'tubes',
     headers: {
-        value:               {value: 'Наименование',    type: 'text' },         
+        value:             {value: 'Наименование',    type: 'text' },         
         depth:             {value: 'Глубина',    type: 'float' },         
     },
 
@@ -59,8 +62,9 @@ export const tubeSettings = {
 
 export const samplesSettings = {
     title: 'Замеры',
+    tableKey:'samples',
     headers: {
-        date:             {value: 'Дата',    type: 'date' },
+        date:              {value: 'Дата',    type: 'date' },
         depth:             {value: 'Глубина',    type: 'float' },         
         value:             {value: 'Температура',    type: 'text' },         
     },
@@ -74,6 +78,7 @@ export const samplesSettings = {
 
 export const pivotSettings = {
     title: 'Ведомость по дому',
+    tableKey:'pivot',
     headers: {
         tube:              {value: 'Трубка',    type: 'text', group: true },
         quarter:           {value: 'Квартал',   type: 'integer' },         

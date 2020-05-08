@@ -1,9 +1,18 @@
 import React from 'react';
-import { Kompot } from '../../components/ViewTable/Kompot';
+import Kompot from '../../components/ViewTable/Kompot';
 import { tubeSettings } from '../../components/ViewTable/tableSettings'
 import HouseCard from '../../components/HouseCard';
-import { withRouter } from 'react-router';
+import { withRouter, Redirect } from 'react-router';
 import { list } from '../pages';
+import { connect } from 'react-redux';
+
+const mapStateToProps = function(state) {
+    return {
+      loggedIn: state.auth.loggedIn,
+      login: state.auth.login,
+      roles: state.auth.roles,
+    }
+}
 
 class House extends React.Component {
     constructor(props) {
@@ -16,18 +25,24 @@ class House extends React.Component {
 
     render() {
         const {
-           
+            roles,
+            loggedIn
         } = this.props;
         const id = this.props.match.params.id;
+        
         return(
             <>
+                {!loggedIn && <Redirect to={list.authError.shortPath}/>}
+                {roles && !((roles.find(r => r=='ChangeRecord'))||(roles.find(r => r=='SuperUser'))) && <Redirect to={list.rolesError.path}/>}
                 <HouseCard id={id}/>
                 <Kompot
                 enterPage={list.tube.shortPath}
-                staticFilters={{ houseId:[{type:'equal',value:id}] }} settings={tubeSettings}/>
+                staticFilters={{ houseId:[{type:'equal',value:id}] }} 
+                settings={tubeSettings}
+                addivityTableKey={id}/>
             </>
         )
     }
 } 
 
-export default withRouter(House)
+export default connect(mapStateToProps)(withRouter(House))

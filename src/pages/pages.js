@@ -52,6 +52,7 @@ export const list = {
     authError: {
         title: 'Ошибка регистрации',
         path: '/errorlogin',
+        shortPath: '/errorlogin',
         component: AuthError,
     },
     rolesError: {
