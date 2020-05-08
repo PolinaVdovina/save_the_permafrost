@@ -99,7 +99,14 @@ export default class HouseCard extends React.Component {
     render() {
         return(
             <div>
-                {this.state.flag && <Card object={this.state.object}></Card>}
+                {this.state.flag && 
+                    <Card 
+                        object={this.state.object} 
+                        close={this.props.close} 
+                        changesActive={this.props.isCreate ? true : false} 
+                        isCreate={this.props.isCreate}>
+                    </Card>
+                }
             </div>
         )
     }

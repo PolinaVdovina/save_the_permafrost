@@ -19,7 +19,7 @@ class Tube extends React.Component {
         const id = this.props.match.params.id;
         return(
             <>
-                <TubeCard id={id} />
+                <TubeCard id={id} isCreate={false}/>
                 <Kompot
 
                 staticFilters={{ tubeId:[{type:'equal',value:id}] }}
