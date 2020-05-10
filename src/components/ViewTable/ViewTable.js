@@ -129,8 +129,12 @@ class ViewTable extends React.Component {
         if(rowCount > 0) {
 
             let actPag = pagination[tableKey] ? pagination[tableKey] : defaultPagination;
-            if (actPag.currentPage * actPag.rowsPerPage > rowCount - 1) {
-                const newPag ={...actPag, currentPage: (rowCount-1) / actPag.rowsPerPage};
+            const {
+                rowsPerPage = defaultPagination.rowsPerPage,
+                currentPage = defaultPagination.currentPage
+            } = actPag;
+            if (currentPage * rowsPerPage > rowCount - 1) {
+                const newPag ={...actPag, currentPage: Math.floor((rowCount-1) / rowsPerPage)};
                 store.dispatch( setPagination(tableKey, newPag) );
                 onReloadData && onReloadData(filter[tableKey], newPag)
             }
@@ -514,16 +518,22 @@ class ViewTable extends React.Component {
             onReloadData,
             tableKey,
             filter,
-            pagination,
+            pagination=defaultPagination,
             defaultPagination
         } = this.props;
+
+        const {
+            rowsPerPage = defaultPagination.rowsPerPage,
+            currentPage = defaultPagination.currentPage
+        } = pagination;
 
         if(!pagination[tableKey]) {
             store.dispatch(setPagination(tableKey, defaultPagination));
         }
-
+         
         const newPag = {
             ...pagination[tableKey],
+            rowsPerPage: rowsPerPage,
             currentPage: newPage , 
         }
         store.dispatch(setPagination(tableKey, newPag));
