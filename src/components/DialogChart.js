@@ -7,8 +7,8 @@ export default function DialogChart(props) {
     return(
         <Dialog open={props.open} onClose={props.close} fullWidth maxWidth='lg'>
             <DialogTitle>
-                <Typography variant="h3">
-                    Скважина {props.data[0].tube}
+                <Typography variant="h4">
+                    Скважина {props.data && props.data[0] && props.data[0].tube}
                 </Typography>                
             </DialogTitle>
             <Chart data={props.data}></Chart>
