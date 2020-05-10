@@ -17,6 +17,91 @@ const mapStateToProps = function(state) {
   }
   
 
+  function MyMenuItem(props) {
+    const {
+        component = Button,
+        to='',
+        title,
+        onClick
+    } = props;
+    const C = component;
+    return (
+        <C
+        onClick={onClick}
+        component={NavLink}
+        to={to} 
+        color="inherit">
+            {title}
+        </C>
+    )
+}  
+
+
+const  MenuButtons = (props) => {
+    const {
+        classes,
+        loggedIn,
+        login,
+        roles=[],
+        component = Button,
+    } = props;
+    const C = component;
+    return <>
+            {!loggedIn && 
+            <MyMenuItem
+            component={C}
+            to={list.auth.path} 
+            color="inherit"
+            title='Авторизация'/>
+            }
+
+            
+            {roles && ((roles.find(r => r=='ChangeUser'))||(roles.find(r => r=='SuperUser'))) &&
+            <MyMenuItem
+            component={ C }
+            to={list.register.path} 
+            color="inherit"
+            title="Добавить пользователя"/>}
+                
+
+
+            {loggedIn && 
+            <MyMenuItem
+            component={ C }
+            to={list.housesPivot.shortPath} 
+            color="inherit"
+            title='Ведомость и графики'
+            />}
+
+            {roles && ((roles.find(r => r=='ChangeRecord'))||(roles.find(r => r=='SuperUser'))) &&
+            <MyMenuItem
+            component={ C }
+            to={list.houses.shortPath} 
+            color="inherit"
+            title='Редактировать данные'
+            />}
+
+
+            {loggedIn && 
+            <MyMenuItem
+            onClick = 
+            {
+                () => { 
+                    localStorage.removeItem('access_token');
+                    localStorage.removeItem('user_login');
+                    localStorage.removeItem('user_id');
+                    localStorage.removeItem('user_roles');
+                    store.dispatch(logout())
+                }
+            }
+            component={ C }
+            to={list.auth.path} 
+            color="inherit"
+            title='Выйти'
+            />}
+        </>
+}  
+
 
 class MainMenu extends React.Component {
     constructor(props) {
@@ -35,69 +120,16 @@ class MainMenu extends React.Component {
            roles=[],
         } = this.props;
 
+
+
         return(
-            <AppBar position="fixed">
-            <Toolbar>
-
-                <Typography variant="h6" className={classes.title}>
-                АМИЦ
-                </Typography>
-
-                {!loggedIn && 
-                <Button
-                component={NavLink}
-                to={list.auth.path} 
-                color="inherit">
-                    Авторизация
-                </Button>}
-
-
-                {roles && ((roles.find(r => r=='ChangeUser'))||(roles.find(r => r=='SuperUser'))) &&
-                <Button
-                component={ NavLink }
-                to={list.register.path} 
-                color="inherit">
-                    Добавить пользователя
-                </Button>}
-
-                {loggedIn && 
-                <Button
-                component={ NavLink }
-                to={list.housesPivot.shortPath} 
-                color="inherit">
-                    Ведомость и графики
-                </Button>}
-
-                {roles && ((roles.find(r => r=='ChangeRecord'))||(roles.find(r => r=='SuperUser'))) &&
-                <Button
-                component={ NavLink }
-                to={list.houses.shortPath} 
-                color="inherit">
-                    Редактировать данные
-                </Button>}
-
-
-                {loggedIn && 
-                <Button
-                onClick = 
-                {
-                    () => { 
-                        localStorage.removeItem('access_token');
-                        localStorage.removeItem('user_login');
-                        localStorage.removeItem('user_id');
-                        localStorage.removeItem('user_roles');
-                        store.dispatch(logout())
-                    }
-                }
-                component={ NavLink }
-                to={list.auth.path} 
-                color="inherit">
-                    Выйти
-                </Button>}
-
-                
-
-            </Toolbar>
+            <AppBar position="fixed" style={{width:'100%'}} >
+                <Toolbar>
+                    <Typography variant="h6" className={classes.title}>
+                    АМИЦ
+                    </Typography>
+                    <MenuButtons {...this.props}/>
+                </Toolbar>
             </AppBar>
         )
     }

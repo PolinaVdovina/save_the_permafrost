@@ -89,7 +89,7 @@ class ViewTable extends React.Component {
             //Открыто ли окошко с фильтром?
             isFilterDrawerOpen: false,    
             pagination: defaultPagination,
-            openHuiChart: false,
+            openHuiChart: null,
             changeRecord: {
                 id: null,
                 values: {},
@@ -287,7 +287,7 @@ class ViewTable extends React.Component {
                 advancedTableData &&
                 advancedTableData.map((value) => 
                 <TableCell>
-                {value}
+                {value + 'м'}
                 </TableCell>)
             }
             </TableRow>
@@ -368,7 +368,9 @@ class ViewTable extends React.Component {
                     
                         <TableCell
                         className = {classes.tableCell}>
+                            <Grid container style={{flexWrap:'nowrap'}}>
                             {
+                            
                             id != changeRecord.id && onDeleteRow && 
                             <React.Fragment>
                                 <Tooltip title='Удалить запись'>                        
@@ -420,15 +422,16 @@ class ViewTable extends React.Component {
                                 </Tooltip>
                             }
                             {
-                                ChartComponent &&
+                                ChartComponent && !(id >=1 && tableData[id].tubeId == tableData[id-1].tubeId)  &&
                                 <Tooltip title='Построить график'>                        
                                 <IconButton
-                                onClick={()=>this.setState({openHuiChart:true})}
+                                onClick={()=>this.setState({openHuiChart:tableData[id].tubeId})}
                                 >
                                     <TimelineIcon/>
                                 </IconButton>
                                 </Tooltip>
                             }
+                            </Grid>
                         </TableCell>
                         {
                             //Object.keys - получаем массив ключей из settings.header ([street, district, number])
@@ -551,11 +554,12 @@ class ViewTable extends React.Component {
             openHuiChart,
         } = this.state;
 
-
+        //alert(JSON.stringify(tableData.filter( (el) => el.tubeId == openHuiChart )));
         return (
             <React.Fragment>
                 {ChartComponent && 
-                <ChartComponent open={openHuiChart} close={() => this.setState({openHuiChart: false}) } data={tableData} />
+                <ChartComponent open={openHuiChart!=null} close={() => this.setState({openHuiChart: null}) } 
+                data={tableData.filter( (el) => el.tubeId == openHuiChart )}/>
                 }
                 { 
                 CardDialog && 
@@ -580,7 +584,7 @@ class ViewTable extends React.Component {
                     }
                     onCancel = { () => this.setState({confirmDialog:null}) }
                     open={true}/>}
-                <Paper className = {classes.paper}>
+                <Paper elevation={4} className = {classes.paper}>
                     <Toolbar className={classes.tableButtonsDiv}>
                         {
                         onBack && 
@@ -594,7 +598,7 @@ class ViewTable extends React.Component {
                         </Tooltip>
                         }
                         <Typography 
-                        variant='h6'
+                        variant='h4'
                         className={classes.title}>
                             {settings.title}
                         </Typography>

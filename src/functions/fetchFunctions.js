@@ -1,3 +1,5 @@
+import { store } from "../store";
+
 function getUrl(type) {
     let url = '/api/';
     
@@ -23,7 +25,7 @@ export function change(type, json) {
     const postGet = {
         method: 'POST',
         headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('access_token'),
+          'Authorization': 'Bearer '+ store.getState().auth.token,
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
@@ -39,7 +41,7 @@ export function add(type, json, next) {
     const postGet = {
         method: 'POST',
         headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('access_token'),
+          'Authorization': 'Bearer '+ store.getState().auth.token,
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
@@ -58,8 +60,8 @@ export function load(type, id, func) {
     const postGet = {
         method: 'POST',
         headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token'),
-        'Accept': 'application/json'
+            'Authorization': 'Bearer '+ store.getState().auth.token,
+            'Accept': 'application/json'
         },
     };
     fetch(url, (postGet)).then(resolve => resolve.json()).then(resolve => func(resolve));

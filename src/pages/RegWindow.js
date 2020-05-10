@@ -19,7 +19,7 @@ import { Backdrop, CircularProgress } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      height: '100vh',
+      flexGrow:1,
       alignItems:'center',
     },
     paper: {
@@ -127,11 +127,11 @@ function RegWindow(props) {
         </Backdrop>) 
 
       return(
-        <div>
+        <>
           { (props.loggedIn && isAdmin) &&
           <Grid container component="main" className={classes.root} justify='center' alignItems='center'>
           <CssBaseline />
-          <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          <Grid item  component={Paper} elevation={6} square>
               <div className={classes.paper}>
               <Avatar className={classes.avatar}>
                   <PermIdentity />
@@ -201,7 +201,7 @@ function RegWindow(props) {
         }
         {!props.loggedIn && <Redirect to={list.authError.path}/>}
         {(props.loggedIn && !isAdmin) && <Redirect to={list.rolesError.path}/>}
-        </div>
+        </>
         )
     }
 
