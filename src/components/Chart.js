@@ -1,5 +1,5 @@
 import React from 'react';
-import { VictoryChart, VictoryLine, VictoryTheme, VictoryAxis, VictoryScatter} from "victory";
+import { VictoryChart, VictoryLine, VictoryTheme, VictoryAxis, VictoryScatter, VictoryLabel} from "victory";
 import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import { Grid, Typography, Avatar } from '@material-ui/core';
 
@@ -25,8 +25,7 @@ export default class Chart extends React.Component {
     }
 
     componentWillMount() {
-        //let temp = {...this.props.data}; 
-        let temp = [];
+        let temp = []; 
         let maxX = 0; let minX = 100;
         let maxY = 0;
         for (let i = 0; i < this.props.data.length; i++) {           
@@ -37,12 +36,12 @@ export default class Chart extends React.Component {
             temp[i].depth_values = massToObjects(this.props.data[i].depth_values);
             let strColor = '#' + (Math.random().toString(16) + '000000').substring(2,8).toUpperCase();
             temp[i].color = strColor; 
+            temp[i].date = this.props.data[i].date;
         }    
         this.setState({data: temp, maxDomain: {x: maxX + 1, y: maxY + 1}, minDomain: {x: minX - 1, y: 0}})
     }
 
     render() {
-
         return(
         <Grid container direction="row" alignItems="center">
             <Grid item style={{flexGrow: 1}}>
@@ -72,8 +71,17 @@ export default class Chart extends React.Component {
                             data={el.depth_values}
                         />
                     )}                              
-                    <VictoryAxis orientation="top"/> 
-                    <VictoryAxis dependentAxis invertAxis/>
+                    <VictoryAxis
+                        axisLabelComponent={<VictoryLabel dy={-20}/>}
+                        orientation="top" 
+                        label="Температура, град." 
+                        style={{ padding: '300px' }}/> 
+                    <VictoryAxis 
+                        dependentAxis 
+                        invertAxis 
+                        label="Глубина скважины, м"
+                        axisLabelComponent={<VictoryLabel dy={30}/>}
+                        />
                 </VictoryChart>
             </Grid>
             <Grid item>
