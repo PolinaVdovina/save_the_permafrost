@@ -125,6 +125,9 @@ class Pivot extends React.Component {
         return(
             <>
                 {!loggedIn && <Redirect to={list.authError.shortPath}/>}
+                
+                <HouseCard id={id} isCreate={false} canEdit={false}/>
+                <div style={{height:'25px'}}/>
                 <Kompot
                 drawHeader={init ? this.drawHeader : null}
                 drawBody={init ? this.drawBody : null}

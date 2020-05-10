@@ -30,8 +30,7 @@ export const housePivotSettings = {
     title: 'Дома',
     tableKey:'housesPivot',
     //enterButtonHandler: (id) => alert('Ты вошёл в дом ' + id + ', долбаёб'),
-    headers: {
-        id:               {value: 'Улица',    type: 'text' },         
+    headers: {      
         street:               {value: 'Улица',    type: 'text' },         
         district:             {value: 'Район',    type: 'district' },         
         number:               {value: 'Дом',      type: 'text' },         
@@ -80,9 +79,11 @@ export const pivotSettings = {
     title: 'Ведомость по дому',
     tableKey:'pivot',
     headers: {
-        tube:              {value: 'Трубка',    type: 'text', group: true },
-        quarter:           {value: 'Квартал',   type: 'integer' },         
-        date:              {value: 'Дата',      type: 'date' }, 
+        tube:              {value: 'Трубка',   type: 'text', group: true },
+        quarter:           {value: 'Квартал',  type: 'integer' },         
+        year:              {value: 'Год',      type: 'integer' }, 
+        month:              {value: 'Месяц',   type: 'mouth' }, 
+        day:              {value: 'День',      type: 'integer' }, 
     },
 
     fetchFunctions: {

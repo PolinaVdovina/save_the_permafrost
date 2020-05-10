@@ -22,7 +22,7 @@ export const NumericTextField = (props) => {
 
 const mouths = ['Январь', 'Февраль', 'Март', 'Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 const districts = ['Норильск', 'Талнах', 'Кайеркан', 'Оганер'];
-export const SelectByList = (list, valuesInIndex=true) => {
+export const SelectByList = (list) => {
     return (
         (props) => (
             <TextField select {...props}>
@@ -36,8 +36,22 @@ export const SelectByList = (list, valuesInIndex=true) => {
     )
 }
 
+export const SelectByList_ReturningNumber = (list) => {
+    return (
+        (props) => (
+            <TextField select {...props}>
+            {list.map( (value,index) =>
+                <MenuItem key={index} value={index+1}>
+                    {value}
+                </MenuItem>
+            )}
+            </TextField>
+        )
+    )
+}
+
 export const SelectDistrict = SelectByList(districts);
-export const SelectMouth = SelectByList(mouths);
+export const SelectMouth = SelectByList_ReturningNumber(mouths);
 
 
 export const SelectDate = (props) => {

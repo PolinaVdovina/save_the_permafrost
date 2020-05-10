@@ -1,4 +1,4 @@
-import { RangeSelectorByComponent, SelectByList, SelectDistrict, NumericTextField, T, RangeSelector, SelectDate } from "./TextFieldTypes"
+import { RangeSelectorByComponent, SelectByList, SelectDistrict, NumericTextField, T, RangeSelector, SelectDate, SelectMouth } from "./TextFieldTypes"
 import { TextField } from "@material-ui/core"
 
 export const selectors = {
@@ -19,6 +19,7 @@ export const typeSelectors = {
     float: ['equal', 'more', 'less', 'moreEqual', 'lessEqual', 'inRange', 'outRange' ],
     date: ['equalText', 'more', 'less', 'moreEqual', 'lessEqual', 'inRange', 'outRange' ],
     district: ['equalText'],
+    mouth:['equal', 'more', 'less', 'moreEqual', 'lessEqual', 'inRange', 'outRange' ],
 }
 
 
@@ -27,5 +28,6 @@ export const changeTextFields = {
     integer: NumericTextField,
     float: NumericTextField,
     date: SelectDate,
+    mouth: SelectMouth,
     district: SelectDistrict,
 }

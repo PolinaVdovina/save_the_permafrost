@@ -36,6 +36,7 @@ class Tube extends React.Component {
                 {!loggedIn && <Redirect to={list.authError.shortPath}/>}
                 {roles && !((roles.find(r => r=='ChangeRecord'))||(roles.find(r => r=='SuperUser'))) && <Redirect to={list.rolesError.path}/>}
                 <TubeCard id={id} isCreate={false}/>
+                <div style={{height:'25px'}}/>
                 <Kompot
                 addivityTableKey={id}
                 staticFilters={{ tubeId:[{type:'equal',value:id}] }}

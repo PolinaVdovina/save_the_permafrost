@@ -33,6 +33,7 @@ class HousesPivot extends React.Component {
         return(
             <>
                 {!loggedIn && <Redirect to={list.authError.shortPath}/>}
+                
                 <Kompot 
                 enterPage={list.pivot.shortPath}
                 settings={housePivotSettings}/>

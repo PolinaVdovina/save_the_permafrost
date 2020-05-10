@@ -7,7 +7,7 @@ import {Pages} from './pages/'
 import { login } from './actions/AuthActions';
 import { Kompot } from './components/ViewTable/Kompot';
 import MainMenu from './components/MainMenu/MainMenu';
-import { Backdrop, CircularProgress, MuiThemeProvider, Grid, makeStyles } from '@material-ui/core';
+import { Backdrop, CircularProgress, MuiThemeProvider, Grid, makeStyles, Container } from '@material-ui/core';
 import theme from './theme';
 
 
@@ -63,16 +63,16 @@ function App() {
   return (
     <MuiThemeProvider theme={theme}>
       <Provider store={store}>
-      <MainMenu/>
-       
-          <Grid item style={{height:'10px'}}>
-            <main className={classes.content}>
-              {loading && <Backdrop open={true}><CircularProgress/></Backdrop>}
-              
-              {!loading && Pages.getAllRoutesFromPages()}
-            </main>
-          </Grid>
-   
+        <div>
+          <MainMenu/>
+            <Grid container direction='row' style={{justifyContent:'center'}}>
+              <Grid xs={12} xl={10} container direction='column' style={{minHeight:'100vh', padding:'32px'}}>
+                <Grid item style={{height:'64px'}}/>
+                {loading && <Backdrop open={true}><CircularProgress/></Backdrop>}
+                {!loading && Pages.getAllRoutesFromPages()}
+              </Grid>
+            </Grid>
+        </div>
       </Provider>
     </MuiThemeProvider>
   );

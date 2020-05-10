@@ -31,7 +31,7 @@ export const useStyles = (theme) => ({
         overflowX: 'auto'   
     },
     paper: {
-        
+        width:'100%'
               
     },
 

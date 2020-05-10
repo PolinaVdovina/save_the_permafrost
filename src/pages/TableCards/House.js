@@ -37,6 +37,7 @@ class House extends React.Component {
                 {!loggedIn && <Redirect to={list.authError.shortPath}/>}
                 {roles && !((roles.find(r => r=='ChangeRecord'))||(roles.find(r => r=='SuperUser'))) && <Redirect to={list.rolesError.path}/>}
                 <HouseCard id={id} isCreate={false}/>
+                <div style={{height:'25px'}}/>
                 <Kompot
                 enterPage={list.tube.shortPath}
                 staticFilters={{ houseId:[{type:'equal',value:id}] }} 

@@ -6,11 +6,14 @@ import { Grid, Typography, Avatar } from '@material-ui/core';
 
 function massToObjects(mass) {
     let result = [];
+    let result2 = [];
     for (let i = 0; i < mass.length; i++) {
-        if (mass[i] != "-") 
+        if (mass[i] != "-") {
             result.push({x: mass[i], y: i+1});
+            result2.push(mass[i]);
+        }
     }
-    return result;
+    return [result, result2];
 }
 
 
@@ -28,12 +31,16 @@ export default class Chart extends React.Component {
         let temp = []; 
         let maxX = 0; let minX = 100;
         let maxY = 0;
-        for (let i = 0; i < this.props.data.length; i++) {           
-            if (Math.max.apply(Math, this.props.data[i].depth_values) > maxX) maxX = Math.max.apply(Math, this.props.data[i].depth_values);
-            if (Math.min.apply(Math, this.props.data[i].depth_values) < minX) minX = Math.min.apply(Math, this.props.data[i].depth_values);
-            if (this.props.data[i].depth_values.length > maxY) maxY = this.props.data[i].depth_values.length;
+        for (let i = 0; i < this.props.data.length; i++) {  
+            const tempPair = massToObjects(this.props.data[i].depth_values)
+
             temp.push({});
-            temp[i].depth_values = massToObjects(this.props.data[i].depth_values);
+            temp[i].depth_values = tempPair[0]
+            
+            if (Math.max.apply(Math, tempPair[1]) > maxX) maxX = Math.max.apply(Math, tempPair[1]);
+            if (Math.min.apply(Math, tempPair[1]) < minX) minX = Math.min.apply(Math, tempPair[1]);
+            if (this.props.data[i].depth_values.length > maxY) maxY = this.props.data[i].depth_values.length;
+
             let strColor = '#' + (Math.random().toString(16) + '000000').substring(2,8).toUpperCase();
             temp[i].color = strColor; 
             temp[i].date = this.props.data[i].date;
@@ -42,6 +49,7 @@ export default class Chart extends React.Component {
     }
 
     render() {
+        
         return(
         <Grid container direction="row" alignItems="center">
             <Grid item style={{flexGrow: 1}}>

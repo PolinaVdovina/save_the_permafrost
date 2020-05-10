@@ -78,6 +78,10 @@ export default class HouseCard extends React.Component {
     }
 
     render() {       
+        const {
+            canEdit=true
+        } = this.props;
+
         const list = 
             this.props.object.rows.map(row => 
                 <TextFieldInfo 
@@ -93,9 +97,9 @@ export default class HouseCard extends React.Component {
         return(
             <Grid container  justify="left" alignItems="center">
                 <Grid item component={Paper} elevation={3} square style={{padding:'32px'}}>
-                    <Typography variant="h3">
-                        {this.props.object.title}   {(!this.state.isChangesActive && !this.props.isCreate) && <IconButton onClick={()=> this.setState({isChangesActive: true})}><CreateIcon/></IconButton>}
-                        {(this.state.isChangesActive && !this.props.isCreate) && <IconButton onClick={()=> this.saveHandler()}><SaveIcon/></IconButton>}
+                    <Typography variant="h4">
+                        {this.props.object.title}   {(!this.state.isChangesActive && !this.props.isCreate) && canEdit && <IconButton onClick={()=> this.setState({isChangesActive: true})}><CreateIcon/></IconButton>}
+                        {(this.state.isChangesActive && !this.props.isCreate) && canEdit && <IconButton onClick={()=> this.saveHandler()}><SaveIcon/></IconButton>}
                     </Typography>                   
                     <hr></hr>
                     {list} 
