@@ -1,5 +1,5 @@
 import React from 'react';
-import { VictoryChart, VictoryLine, VictoryTheme, VictoryAxis, VictoryScatter, VictoryLabel} from "victory";
+import { VictoryChart, VictoryLine, VictoryTheme, VictoryAxis, VictoryScatter, VictoryLabel, VictoryVoronoiContainer} from "victory";
 import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import { Grid, Typography, Avatar } from '@material-ui/core';
 
@@ -54,6 +54,7 @@ export default class Chart extends React.Component {
         <Grid container direction="row" alignItems="center">
             <Grid item style={{flexGrow: 1}}>
                 <VictoryChart 
+                    containerComponent={<VictoryVoronoiContainer/>} 
                     theme={VictoryTheme.material}
                     minDomain={this.state.minDomain}
                     maxDomain={this.state.maxDomain}
@@ -77,6 +78,8 @@ export default class Chart extends React.Component {
                             size={4}
                             sortKey={0}
                             data={el.depth_values}
+                            labels={({ datum }) => datum.x}
+                            labelComponent={<VictoryTooltip/>}
                         />
                     )}                              
                     <VictoryAxis
