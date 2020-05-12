@@ -1,5 +1,5 @@
 import React from 'react';
-import { VictoryChart, VictoryLine, VictoryTheme, VictoryAxis, VictoryScatter, VictoryLabel, VictoryVoronoiContainer} from "victory";
+import { VictoryChart, VictoryLine, VictoryTheme, VictoryAxis, VictoryScatter, VictoryLabel, VictoryVoronoiContainer, VictoryTooltip} from "victory";
 import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import { Grid, Typography, Avatar } from '@material-ui/core';
 

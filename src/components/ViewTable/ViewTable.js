@@ -522,10 +522,11 @@ class ViewTable extends React.Component {
             defaultPagination
         } = this.props;
 
+
         const {
             rowsPerPage = defaultPagination.rowsPerPage,
             currentPage = defaultPagination.currentPage
-        } = pagination;
+        } = pagination[tableKey] ? pagination[tableKey] : defaultPagination;
 
         if(!pagination[tableKey]) {
             store.dispatch(setPagination(tableKey, defaultPagination));
